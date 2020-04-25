@@ -12,7 +12,7 @@ and jobs requirements. It has inbuilt sklearn functions as well as my own functi
 #I assumed skills and job desc as important features.
 
 
-#cleaned the dataset having skills,job description as an important parameter
+# cleaned the dataset having skills,job description as an important parameter
 1.removed unimportant features
 2.label encoders
 3.added skills acc to job titles.
