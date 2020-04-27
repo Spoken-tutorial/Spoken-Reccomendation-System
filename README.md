@@ -25,3 +25,10 @@ and jobs requirements. It has inbuilt sklearn functions as well as my own functi
 3.It has cosine similarity approach,jacard and distance based approach.<br>
 4.I assumed skills and job desc as important features.
 
+# Applied item-item similarity between job description and user skills (Basic model-1)
+1.calculated jacard similarity<br>
+2.tfidf matrix<br>
+3.cosine similarity<br>
+4.top n job titles for student<br>
+5.using ERS_DATASET
+
