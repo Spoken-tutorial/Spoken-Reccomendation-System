@@ -1,0 +1,86 @@
+{% load static %}
+
+<html lang="en" xmlns:max-width="http://www.w3.org/1999/xhtml" xmlns:margin="http://www.w3.org/1999/xhtml">
+<html>
+<head>
+<title>Recommendation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="{% static "css/style.css" %}">
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+
+<section id="header">
+<div class="menu-bar">
+
+
+    <nav class="navbar navbar-expand-lg navbar-light">
+  <a class="navbar-brand" href="#">Spoken Tutorial Recommendation System</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="#">All Jobs<span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">companies</a>
+      </li>
+
+         <li class="nav-item">
+        <a class="nav-link" href="#">Apply</a>
+      </li>
+         <li class="nav-item">
+        <a class="nav-link" href="#">Post</a>
+      </li>
+          <li class="nav-item">
+        <a class="nav-link" href="#">recommend jobs</a>
+
+
+    </ul>
+  </div>
+</nav>
+
+<body>
+<section id="jobs">
+  <div class="container">
+    <h5>Recent Updates</h5>
+      {% for job in alljobs %}
+<form method="post" action="">{% csrf_token %}
+    <div class="company-details">
+    <div class="job-update">
+<h4><b> {{job.jobtitle}} </b></h4>
+      <p>{{ job.employer }}</p>
+      <i class="fa fa-briefcase"></i><span> 0-1 yrs </span><br>
+       <i class="fa fa-inr"></i><span> 3-4 Lacs p.a.</span><br>
+       <i class="fa fa-map-marker"></i><span>{{job.joblocation}}</span><br>
+        <p>Skills <i class="fa fa-angle-double-right"></i><small>{{ job.jobskills }}</small></p>
+      <p>Description <i class="fa fa-angle-double-right"></i>{{ job.jobdescription }}<a href="#">Read more</a></p>
+
+
+
+
+    </div>
+
+      <div class="apply-btn">
+        <button type="submit" class="btn btn-primary">Apply</button>
+      </div>
+  </div>
+</form>
+      {% endfor %}
+
+</body>
+</html>

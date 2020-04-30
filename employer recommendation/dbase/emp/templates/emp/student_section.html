@@ -1,0 +1,39 @@
+{% extends 'emp/base.html' %}
+
+{% block text %}
+student section
+{% endblock %}
+
+{% block nav %}
+  <li class="nav-item">
+        <a class="nav-link" href="students">
+          <i class="fas fa-user-graduate"></i>
+          <span>Students</span></a>
+      </li>
+
+  <li class="nav-item">
+        <a class="nav-link" href="students">
+          <i class="fas fa-user-graduate"></i>
+          <span>Apply for jobs</span></a>
+      </li>
+
+  <li class="nav-item">
+        <a class="nav-link" href="students">
+          <i class="fas fa-user-graduate"></i>
+          <span>jobs applied</span></a>
+      </li>
+
+ <li class="nav-item">
+        <a class="nav-link" href="logout">
+          <i class="fas fa-user-graduate"></i>
+          <span>Log out</span></a>
+      </li>
+{% endblock %}
+
+{% block name %}
+
+{% if user.is_authenticated %}
+    <span class="mr-2 d-none d-lg-inline text-gray-600 small">Logged in as {{request.user}}</span>
+{% endif %}
+
+{% endblock %}
