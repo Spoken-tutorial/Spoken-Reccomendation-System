@@ -1,7 +1,11 @@
 # Spoken-Recommendation-System
-1.created a project name-> 'er_system'<br>
-2.created an app name->    'spoken_ers'<br>
+1.created a project name-> 'dbase'<br>
+2.created an app name->    'emp'<br>
 3.created template dir having 'base.html' file which will be the wrapper of our all  html files
+4.created index.html for homepage having signup and signin features
+5.created student and employer sections 
+6.created company,jobs,students and applied jobs models
+7.registered it in admin pannel
 
 # cleaned the dataset having skills,job description as an important parameter
 1.removed unimportant features
