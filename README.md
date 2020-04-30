@@ -1,10 +1,10 @@
 # Spoken-Recommendation-System
 1.created a project name-> 'dbase'<br>
 2.created an app name->    'emp'<br>
-3.created template dir having 'base.html' file which will be the wrapper of our all  html files
-4.created index.html for homepage having signup and signin features
-5.created student and employer sections 
-6.created company,jobs,students and applied jobs models
+3.created template dir having 'base.html' file which will be the wrapper of our all  html files<br>
+4.created index.html for homepage having signup and signin features<br>
+5.created student and employer sections <br>
+6.created company,jobs,students and applied jobs models<br>
 7.registered it in admin pannel
 
 # cleaned the dataset having skills,job description as an important parameter
