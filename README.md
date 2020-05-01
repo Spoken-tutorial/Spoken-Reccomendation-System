@@ -2,7 +2,7 @@
 1.created a project name-> 'dbase'<br>
 2.created an app name->    'emp'<br>
 3.created template dir having 'base.html' file which will be the wrapper of our all  html files<br>
-4.created index.html for homepage having signup and signin features<br>
+4.created make_index.html for homepage having signup and signin features<br>
 5.created student and employer sections <br>
 6.created company,jobs,students and applied jobs models<br>
 7.registered it in admin pannel
@@ -27,8 +27,10 @@
 4.top n job titles for student<br>
 5.using ERS_DATASET
 
+# django user authentication
+1.used django built in user models,usercreation forms<br>
+2.created decorators to restrict the access of users<br>
+3.created two groups i.e students and employer<br>
+4.login and register templates<br>
 
-# Django initial set up
-1.created company, student apps
-2.created models of company,student and registered in admin site
 
