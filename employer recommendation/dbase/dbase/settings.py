@@ -33,13 +33,15 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'emp.apps.EmpConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'emp',
+
+
 ]
 
 MIDDLEWARE = [
@@ -123,6 +125,20 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT=os.path.join(BASE_DIR,'static')
 
+MEDIA_URL='/images/'
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
+
+
+MEDIA_ROOT=os.path.join(BASE_DIR, 'static/images')
+# configuration
+
+EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER="your email"
+EMAIL_HOST_PASSWORD="password"
+
+
