@@ -6,6 +6,12 @@
 5.created student and employer sections <br>
 6.created company,jobs,students and applied jobs models<br>
 7.registered it in admin pannel
+8.created groups
+9.company and student profiles with image upload feature
+10.forgot password feature using inbuilt auth views
+11.job posting feature by company
+12.added decorators and signals
+
 
 # cleaned the dataset having skills,job description as an important parameter
 1.removed unimportant features
