@@ -1,0 +1,60 @@
+{% extends 'emp/base.html' %}
+
+{% block text %}
+Employer section
+{% endblock %}
+
+
+{% block nav %}
+
+    <!-- Nav Item - Tables -->
+      <li class="nav-item">
+        <a class="nav-link" href="employer_profile">
+      <i class="fas fa-user-tie"></i>
+          <span>Employer Profile</span></a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="employer">
+      <i class="fas fa-user-tie"></i>
+          <span>company info</span></a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="post_jobs">
+      <i class="fas fa-user-tie"></i>
+          <span>Post jobs</span></a>
+      </li>
+
+
+ <li class="nav-item">
+        <a class="nav-link" href="logout">
+          <i class="fas fa-user-graduate"></i>
+          <span>Log out</span></a>
+      </li>
+
+{% endblock %}
+
+
+{% block content %}
+
+<br>
+<div class="row">
+	<div class="col-md-6">
+		<div class="card card-body">
+
+
+			<p>Are you sure you want to delete "{{item}}"?</p>
+
+			<form action="" method="POST">
+
+				{% csrf_token %}
+				<a class="btn btn-warning" href="{% url 'employer' %}">Cancel</a>
+
+				<input class="btn btn-danger" type="submit" name="Confirm">
+			</form>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
