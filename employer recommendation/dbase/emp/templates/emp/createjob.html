@@ -1,0 +1,58 @@
+{% extends 'emp/base.html' %}
+
+{% block text %}
+Employer section
+{% endblock %}
+
+
+{% block nav %}
+
+    <!-- Nav Item - Tables -->
+      <li class="nav-item">
+        <a class="nav-link" href="employer_profile">
+      <i class="fas fa-user-tie"></i>
+          <span>Employer Profile</span></a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="employer">
+      <i class="fas fa-user-tie"></i>
+          <span>company info</span></a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="post_jobs">
+      <i class="fas fa-user-tie"></i>
+          <span>Post jobs</span></a>
+      </li>
+
+
+ <li class="nav-item">
+        <a class="nav-link" href="logout">
+          <i class="fas fa-user-graduate"></i>
+          <span>Log out</span></a>
+      </li>
+
+{% endblock %}
+
+
+{% block content %}
+
+
+
+
+
+
+
+
+			<form action="" method="POST">
+
+    {% csrf_token %}
+                {{form}}
+
+				<input class="btn btn-danger" type="submit" name="submit">
+			</form>
+
+
+
+{% endblock %}
