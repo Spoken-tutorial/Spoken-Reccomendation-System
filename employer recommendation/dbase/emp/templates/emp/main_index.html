@@ -4,15 +4,13 @@
 {% endblock %}
 
 {% block nav %}
-  <li class="nav-item">
-        <a class="nav-link" href="signup">
+
+ <li class="nav-item">
+        <a class="nav-link" href="">
           <i class="fas fa-user-graduate"></i>
-          <span>Sign up</span></a>
+          <span>roles</span></a>
       </li>
-
-
-
-      <!-- Nav Item - Tables -->
+    <!-- Nav Item - Tables -->
       <li class="nav-item">
         <a class="nav-link" href="login">
       <i class="fas fa-user-tie"></i>
@@ -20,7 +18,13 @@
       </li>
 
 {% endblock %}
+
+
+
 {% block content %}
   <!-- Page Wrapper -->
-  <h1>Home page for both employer and student </h1>
+                        <h3 id="form-title">Sign up for a free account</h3>
+                      <a href="signup_student" class="btn btn-warning" role="button">I'm a student</a>
+                    <a href="signup_employer" class="btn btn-danger" role="button">I'm an employer</a>
+
   {% endblock %}
