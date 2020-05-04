@@ -4,13 +4,15 @@ from .models import student,employer,jobs,appliedjobs
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
-
+# Create your views here.
 from .decorators import unauthenticated_user,allowed_users,employers_only
 from django.contrib.auth.decorators import login_required
-from .forms import CreateUserForm,studentform,companyform
+from .forms import CreateUserForm,studentform,companyform,postjobform
 from django.contrib.auth.models import Group
 
-#home page
+def roles(request):
+    return render(request,'emp/role.html')
+
 def index(request):
     if request.user.is_authenticated:
         return redirect('student')
@@ -32,7 +34,7 @@ def apply(request):
             messages.success(request,"Profile has been updated")
     return render(request,'emp/apply.html')
 
-# company sections for posting jobs
+# company sections
 @login_required(login_url='login')
 def postjob(request):
 
@@ -49,6 +51,7 @@ def postjob(request):
 
         jb=jobs(jobtitle=title,joblocation=location,jobskills=skills,jobdescription=share,jobcategory=cate,criteria=criteria,employer=cmp)
         jb.save()
+        return redirect('employer')
     return render(request,'emp/postjob.html')
 
 def results(request):
@@ -126,6 +129,11 @@ def profile(request):
 
 
 
+def student_page(request):
+
+    return render(request,'emp/sindex.html')
+
+
 @allowed_users(allowed_roles=['employer'])
 def employer_profile(request):
     company=request.user.employer
@@ -160,7 +168,7 @@ def handlelogout(request):
 
 # sign up page
 
-def registerpage(request):
+def registerpage_student(request):
     if request.user.is_authenticated:
         return redirect('student')
     else:
@@ -171,15 +179,34 @@ def registerpage(request):
             if form.is_valid():
                 user=form.save()
                 username=form.cleaned_data.get('username')
-                #group=Group.objects.get(name='students')
-                #user.groups.add(group)
-                #student.objects.create(user=user,)
+                group=Group.objects.get(name='students')
+                user.groups.add(group)
+                student.objects.create(user=user,)
                 messages.success(request,'Account was created for '+ username)
                 return redirect("login")
         context={'form':form}
         return render(request,'emp/reg.html',context)
 
+def registerpage_employer(request):
+    if request.user.is_authenticated:
+        return redirect('employer')
+    else:
+        form = CreateUserForm()
+
+        if request.method == 'POST':
+            form = CreateUserForm(request.POST)
+            if form.is_valid():
+                user = form.save()
+                username = form.cleaned_data.get('username')
+                group=Group.objects.get(name='employer')
+                user.groups.add(group)
+                employer.objects.create(user=user,)
+                messages.success(request, 'Account was created for ' + username)
+                return redirect("login")
+        context = {'form': form}
+        return render(request, 'emp/reg.html', context)
     # temporary login page
+
 def loginpage(request):
     if request.user.is_authenticated:
         return redirect('student')
@@ -198,3 +225,37 @@ def loginpage(request):
 
         return render(request, 'emp/login.html')
 
+def create_job(request):
+    form=postjobform()
+    if request.method=='POST':
+        print(request.POST)
+        form=postjobform(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('employer')
+    context={'form':form}
+
+    return render(request,'emp/createjob.html',context)
+
+def update_job(request,pk):
+    jb=jobs.objects.get(id=pk)
+    form=postjobform(instance=jb)
+
+    if request.method=='POST':
+        #print(request.POST)
+        form=postjobform(request.POST,instance=jb)
+        if form.is_valid():
+            form.save()
+            return redirect('employer')
+    context={'form':form}
+
+
+    return render(request,'emp/createjob.html',context)
+
+def delete_job(request,pk):
+    jb = jobs.objects.get(id=pk)
+    if request.method=='POST':
+        jb.delete()
+        return redirect('employer')
+    context={'item':jb}
+    return render(request,'emp/delete_job.html',context)
