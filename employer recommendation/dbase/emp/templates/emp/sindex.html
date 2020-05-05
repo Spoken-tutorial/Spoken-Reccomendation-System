@@ -1,42 +1,27 @@
-{% extends 'emp/base.html' %}
-{% block text %}
-   Profile
-{% endblock %}
-
-
-{% block nav %}
-
-
-
-  <li class="nav-item">
-        <a class="nav-link" href="students">
-          <i class="fas fa-user-graduate"></i>
-          <span>Student Section</span></a>
-      </li>
-
-
-
-{% endblock %}
 
 
 
 
 
 
-{% block content %}
+
+
 {% load static %}
-<script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
 
+<script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+{% block content %}
+
+{% endblock %}
 <div class="resume">
 	 <link rel="stylesheet" href="{% static "emp/css/style1.css" %}">
    <div class="resume_left">
      <div class="resume_profile">
-       <img src="{% static 'emp/img/headshot.jpg' %} " alt="profile_pic">
+       <img src="{{request.user.student.pic.url}} " alt="profile_pic">
      </div>
      <div class="resume_content">
        <div class="resume_item resume_info">
          <div class="title">
-           <p class="bold">stephen colbert</p>
+           <p class="bold">{{data.name}}</p>
            <p class="regular">Designer</p>
          </div>
          <ul>
@@ -45,7 +30,7 @@
                <i class="fas fa-map-signs"></i>
              </div>
              <div class="data">
-               21 Street, Texas <br /> USA
+              {{data.address}}
              </div>
            </li>
            <li>
@@ -53,7 +38,7 @@
                <i class="fas fa-mobile-alt"></i>
              </div>
              <div class="data">
-               +324 4445678
+               {{data.ph}}
              </div>
            </li>
            <li>
@@ -61,7 +46,7 @@
                <i class="fas fa-envelope"></i>
              </div>
              <div class="data">
-               stephen@gmail.com
+             {{data.mail}}
              </div>
            </li>
            <li>
@@ -74,97 +59,31 @@
            </li>
          </ul>
        </div>
-       <div class="resume_item resume_skills">
-         <div class="title">
-           <p class="bold">skill's</p>
-         </div>
-         <ul>
-           <li>
-             <div class="skill_name">
-               HTML
-             </div>
-             <div class="skill_progress">
-               <span style="width: 80%;"></span>
-             </div>
-             <div class="skill_per">80%</div>
-           </li>
-           <li>
-             <div class="skill_name">
-               CSS
-             </div>
-             <div class="skill_progress">
-               <span style="width: 70%;"></span>
-             </div>
-             <div class="skill_per">70%</div>
-           </li>
-           <li>
-             <div class="skill_name">
-               SASS
-             </div>
-             <div class="skill_progress">
-               <span style="width: 90%;"></span>
-             </div>
-             <div class="skill_per">90%</div>
-           </li>
-           <li>
-             <div class="skill_name">
-               JS
-             </div>
-             <div class="skill_progress">
-               <span style="width: 60%;"></span>
-             </div>
-             <div class="skill_per">60%</div>
-           </li>
-           <li>
-             <div class="skill_name">
-               JQUERY
-             </div>
-             <div class="skill_progress">
-               <span style="width: 88%;"></span>
-             </div>
-             <div class="skill_per">88%</div>
-           </li>
-         </ul>
-       </div>
+
        <div class="resume_item resume_social">
          <div class="title">
-           <p class="bold">Social</p>
+           <p class="bold">Project link</p>
          </div>
          <ul>
            <li>
              <div class="icon">
-               <i class="fab fa-facebook-square"></i>
+
              </div>
              <div class="data">
-               <p class="semi-bold">Facebook</p>
-               <p>Stephen@facebook</p>
+               <p class="semi-bold">GitHub</p>
+
+               <a href="{{data.git}}">{{data.git}} <i class="fa fa-github-square"></i></a>
              </div>
            </li>
-           <li>
-             <div class="icon">
-               <i class="fab fa-twitter-square"></i>
-             </div>
-             <div class="data">
-               <p class="semi-bold">Twitter</p>
-               <p>Stephen@twitter</p>
-             </div>
-           </li>
-           <li>
-             <div class="icon">
-               <i class="fab fa-youtube"></i>
-             </div>
-             <div class="data">
-               <p class="semi-bold">Youtube</p>
-               <p>Stephen@youtube</p>
-             </div>
-           </li>
+
+
            <li>
              <div class="icon">
                <i class="fab fa-linkedin"></i>
              </div>
              <div class="data">
                <p class="semi-bold">Linkedin</p>
-               <p>Stephen@linkedin</p>
+                 <a href="{{data.git}}">{{data.lnk}} <i class="fa fa-linkedin-square"></i></a>
              </div>
            </li>
          </ul>
@@ -174,9 +93,9 @@
   <div class="resume_right">
     <div class="resume_item resume_about">
         <div class="title">
-           <p class="bold">About us</p>
+           <p class="bold">About me</p>
          </div>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Perspiciatis illo fugit officiis distinctio culpa officia totam atque exercitationem inventore repudiandae?</p>
+        <p>{{data.about}}</p>
     </div>
     <div class="resume_item resume_work">
         <div class="title">
@@ -184,62 +103,42 @@
          </div>
         <ul>
             <li>
-                <div class="date">2013 - 2015</div>
-                <div class="info">
-                     <p class="semi-bold">Lorem ipsum dolor sit amet.</p>
-                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum, voluptatibus!</p>
-                </div>
+               <p>{{data.exp}}</p>
             </li>
-            <li>
-              <div class="date">2015 - 2017</div>
-              <div class="info">
-                     <p class="semi-bold">Lorem ipsum dolor sit amet.</p>
-                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum, voluptatibus!</p>
-                </div>
-            </li>
-            <li>
-              <div class="date">2017 - Present</div>
-              <div class="info">
-                     <p class="semi-bold">Lorem ipsum dolor sit amet.</p>
-                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum, voluptatibus!</p>
-                </div>
-            </li>
+
+
         </ul>
     </div>
-    <div class="resume_item resume_education">
+    <div class="resume_item resume_work">
       <div class="title">
            <p class="bold">Education</p>
          </div>
       <ul>
-            <li>
-                <div class="date">2010 - 2013</div>
-                <div class="info">
-                     <p class="semi-bold">Web Designing (Texas University)</p>
-                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum, voluptatibus!</p>
-                </div>
-            </li>
-            <li>
-              <div class="date">2000 - 2010</div>
+                <li>
+              <div class="date">{{data.startyear}}-{{data.endyear}}</div>
               <div class="info">
-                     <p class="semi-bold">Texas International School</p>
-                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum, voluptatibus!</p>
+                     <p class="semi-bold">{{data.education}}</p>
+                  <p>{{data.stream}}</p>
                 </div>
             </li>
         </ul>
     </div>
-    <div class="resume_item resume_hobby">
-      <div class="title">
-           <p class="bold">Hobby</p>
+       <div class="resume_item resume_skills">
+        <div class="title">
+           <p class="bold">Skills</p>
          </div>
-       <ul>
-         <li><i class="fas fa-book"></i></li>
-         <li><i class="fas fa-gamepad"></i></li>
-         <li><i class="fas fa-music"></i></li>
-         <li><i class="fab fa-pagelines"></i></li>
-      </ul>
-    </div>
-  </div>
-</div>
+
+
+              {% for d in data.skills %}
+
+             <div class="skill_name">
+               {{d}}
+             </div>
+
+           {% endfor %}
+       </div>
+
+
+
 
 </html>
-{% endblock %}
