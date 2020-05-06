@@ -9,32 +9,52 @@ from .decorators import unauthenticated_user,allowed_users,employers_only
 from django.contrib.auth.decorators import login_required
 from .forms import CreateUserForm,studentform,companyform,postjobform
 from django.contrib.auth.models import Group
+from django.views.generic import View
+from .utils import render_to_pdf
+from django.template.loader import get_template
+import datetime
 
-def roles(request):
-    return render(request,'emp/role.html')
+# function for retrieving students profile
+def forstu(request):
+    name = request.user.student.name
+    education = request.user.student.education
+    exp = request.user.student.experience
+    mail = request.user.student.mail
+    skills = request.user.student.skills
+    about = request.user.student.about
+    git = request.user.student.github
+    lnk = request.user.student.Linkedin
+    ph = request.user.student.phno
+    tscore = request.user.student.Spokentest_score
+    gpa = request.user.student.gpa
+    lst = skills.split(",")
+    stream = request.user.student.degree
+    startyear = request.user.student.startyear
+    endyear = request.user.student.endyear
+    address = request.user.student.address
+    upload_your_work=request.user.student.upload_your_work
+    data = {'name': name, 'lnk': lnk, 'gpa': gpa, 'education': education, 'tscore': tscore, 'exp': exp, 'mail': mail,
+            'skills': lst, 'about': about, 'git': git, 'address': address, 'ph': ph, 'startyear': startyear,
+            'endyear': endyear, 'stream': stream}
+    context = {'data': data}
 
+    return context
+
+#--------------------------------               Main Page
 def index(request):
     if request.user.is_authenticated:
         return redirect('student')
     return render(request,'emp/main_index.html')
+
+
 # student section
-def apply(request):
 
-    if request.method =='POST':
-        name = request.POST['name']
-        skills = request.POST['skills']
-        share= request.POST['share']
-        print(name,skills,share)
 
-        if len(name)<2 or len(skills)==0:
-            messages.error(request,"Please fill it correctly")
-        else:
-            stud = student(name=name, skills=skills, experience=share)
-            stud.save()
-            messages.success(request,"Profile has been updated")
-    return render(request,'emp/apply.html')
+
+
 
 # company sections
+#----------------------------------Post Job details
 @login_required(login_url='login')
 def postjob(request):
 
@@ -54,17 +74,34 @@ def postjob(request):
         return redirect('employer')
     return render(request,'emp/postjob.html')
 
-def results(request):
-    alljobs=jobs.objects.all()
-    context={'alljobs':alljobs}
-    #print(alljobs)
-    #if request.method=='POST':
-
-    return render( request,'emp/results.html',context)
 
 
+# ---------------------------------for generating Student report in Pdf format
+# students section
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['students'])
 
-#o(n^2) algo for recommending
+class GeneratePdf(View):
+    def get(self, request, *args, **kwargs):
+        context=forstu(request)
+
+        pdf = render_to_pdf('emp/pdf_student.html',context)
+        if pdf:
+            response = HttpResponse(pdf, content_type='application/pdf')
+            filename = "Invoice_%s.pdf" % ("12341231")
+            content = "inline; filename='%s'" % (filename)
+            download = request.GET.get("download")
+            if download:
+                content = "attachment; filename='%s'" % (filename)
+            response['Content-Disposition'] = content
+            return response
+        return HttpResponse("Not found")
+
+
+
+
+# ----------------------just a basic attempt o(n^2) algo for recommending  will work later
+
 def recommend(request):
     alljobs=jobs.objects.all()
     stud=student.objects.all()
@@ -106,16 +143,35 @@ def signin(request):
 @employers_only
 @allowed_users(allowed_roles=['students'])
 
-# only students
+# only for students.....-----------------------Student main dashboard
+
+
 def studentpg(request):
-    #p=appliedjobs.objects.all()
 
-    return render(request,'emp/student_section.html')
+    if request.user.student.name==" ":
+        return render(request, 'emp/student_section.html')
+    else:
+
+        a1 = appliedjobs.objects.filter(student__name__startswith=request.user.student)
+        if len(a1)==1:
+
+            date = a1[0].date_created
+        # print(a1.student.all())
+
+            data = a1[0].jobs.all()
+            context = {'data': data, 'date': date}
+
+            return render(request,'emp/student_section.html',context)
+
+
+    return render(request, 'emp/student_section.html')
 
 # only students
+#----------------------------------------------for student profile settings
 
-@allowed_users(allowed_roles=['students'])                 #for student profile
-def profile(request):
+
+@allowed_users(allowed_roles=['students'])
+def student_profile(request):
     student=request.user.student
     form=studentform(instance=student)
 
@@ -127,11 +183,15 @@ def profile(request):
     context={'form':form}
     return render(request,'emp/student_profile.html',context)
 
+#-----------------------------------------------student profile card
 
 
+@allowed_users(allowed_roles=['students'])
 def student_page(request):
+    context=forstu(request)
+    return render(request,'emp/sindex.html',context)
 
-    return render(request,'emp/sindex.html')
+#--------------------------------------employer profile settings part
 
 
 @allowed_users(allowed_roles=['employer'])
@@ -151,22 +211,25 @@ def employer_profile(request):
 
 
 # decorators to allow only employer
+#-------------------------------------Company dashboard for deleting and updating posted jobs
+
+
 @allowed_users(allowed_roles=['employer'])
 def company(request):
     name=request.user.employer.jobs_set.all()
-    #name=request.user.employer.
-    #print(name)
-    context={'name':name}
+    details=request.user.employer
+    context={'name':name,'details':details}
     return render(request,'emp/employer_section.html',context)
 
-#logout
+#----------------------------------------------logout
+
 def handlelogout(request):
 
     logout(request)
     return redirect('index')
     return HttpResponse('404 Not found')
 
-# sign up page
+#------------------------------------- sign up page for student
 
 def registerpage_student(request):
     if request.user.is_authenticated:
@@ -187,6 +250,10 @@ def registerpage_student(request):
         context={'form':form}
         return render(request,'emp/reg.html',context)
 
+
+#--------------------------------------------sign up page for employer
+
+
 def registerpage_employer(request):
     if request.user.is_authenticated:
         return redirect('employer')
@@ -205,26 +272,13 @@ def registerpage_employer(request):
                 return redirect("login")
         context = {'form': form}
         return render(request, 'emp/reg.html', context)
-    # temporary login page
 
-def loginpage(request):
-    if request.user.is_authenticated:
-        return redirect('student')
-    else:
-        if request.method=='POST':
 
-            username=request.POST.get('username')
-            password=request.POST.get('password')
-            user=authenticate(request,username=username,password=password)
 
-            if user is not None:
-                login(request,user)
-                return redirect('index')
-            else:
-                messages.info(request,'username or password is incorrect')
+# ----------------------------create job
+# for employers only
 
-        return render(request, 'emp/login.html')
-
+@allowed_users(allowed_roles=['employer'])
 def create_job(request):
     form=postjobform()
     if request.method=='POST':
@@ -237,6 +291,11 @@ def create_job(request):
 
     return render(request,'emp/createjob.html',context)
 
+
+#!-------------------------------------------------udate job details
+#-------------------------- for employers
+
+@allowed_users(allowed_roles=['employer'])
 def update_job(request,pk):
     jb=jobs.objects.get(id=pk)
     form=postjobform(instance=jb)
@@ -252,6 +311,11 @@ def update_job(request,pk):
 
     return render(request,'emp/createjob.html',context)
 
+#!-------------------------------------------------Delete job details
+#-------------------------- for employers
+
+
+@allowed_users(allowed_roles=['employer'])
 def delete_job(request,pk):
     jb = jobs.objects.get(id=pk)
     if request.method=='POST':
@@ -259,3 +323,90 @@ def delete_job(request,pk):
         return redirect('employer')
     context={'item':jb}
     return render(request,'emp/delete_job.html',context)
+
+
+# for students to search job
+
+@allowed_users(allowed_roles=['students'])
+def searchjob(request):
+    query=request.GET.get('search')
+    head=[]
+    titlejobs=jobs.objects.values('jobtitle','id')      #list of dict
+
+    title={item['jobtitle'] for item in titlejobs}
+    lst=list(title) # set of job titles
+    print(lst)
+
+    titletemp=jobs.objects.filter(jobtitle=query)
+
+    head=titletemp
+    if query in lst:
+        context={'head':head}
+
+        return render(request,'emp/searchjob.html',context)
+    else:
+        return HttpResponse("no item found.Search for job title like Django developer , Java developer")
+
+
+#!------------------------------showcasing all jobs to students posted by companies no filtering initially.will apply later
+# for students
+
+@allowed_users(allowed_roles=['students'])
+def apply_jobs(request):
+    if request.user.student.name==" ":
+        return redirect('profile')
+    else:
+        job=jobs.objects.all()
+        s1=request.user.student
+
+        total=len(job)
+        #print(job)
+        context={'job':job}
+
+        return render(request,'emp/apply.html',context)
+    return HttpResponse("404 NOT FOUND")
+
+# for students
+#  student will apply for jobs
+# used appliedjobs models to access (many to many field)
+@allowed_users(allowed_roles=['students'])
+
+
+def jobs_applied(request,pk):
+    application=appliedjobs.objects.all()
+    st=request.user.student                          #student object
+    jb = jobs.objects.get(id=pk)                     # job object
+    #print(jb.jobskills)
+    a1=appliedjobs.objects.filter(student__name__startswith=request.user.student)                                #applied objects
+    if len(a1)==1:
+        a1[0].jobs.add(jb)
+        print(a1)
+        a1[0].save()
+        date=a1[0].date_created
+    #print(a1.student.all())
+
+        data=a1[0].jobs.all()
+        context={'data':data,'date':date}
+        return render(request,'emp/student_section.html',context)
+    else:
+        a1=appliedjobs()
+        a1.save()
+        a1.jobs.add(jb)
+        a1.student.add(st)
+
+        data = a1.jobs.all()
+        date = a1.date_created
+        context = {'data': data, 'date': date}
+        return render(request, 'emp/student_section.html', context)
+
+    #print(application[1].student.all())  student object
+    #print(application[1].jobs.all())         jobs applied object
+    p=application[1].jobs.all()
+
+    return HttpResponse("404 not found")
+
+
+
+
+
+
