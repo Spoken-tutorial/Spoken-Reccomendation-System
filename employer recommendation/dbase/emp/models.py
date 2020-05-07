@@ -30,7 +30,7 @@ class jobs(models.Model):
     criteria= models.CharField(max_length=100,default=" ")
     employer=models.ForeignKey(employer,null=True,on_delete=models.CASCADE)
     date_created = models.DateField(auto_now_add=True, null=True)
-
+    status = models.CharField(default="On Review", max_length=50, null=True, blank=True)
 
     def __str__(self):
         return self.jobtitle
@@ -48,8 +48,8 @@ class student(models.Model):
 
     education = models.CharField(max_length=30,default=" ")
     degree=models.CharField(max_length=100,default=" ",null=True,blank=True)
-    startyear=models.IntegerField(('startyear'), max_length=4, choices=YEAR_CHOICES, default=datetime.datetime.now().year,blank=True)
-    endyear = models.IntegerField(('endyear'), max_length=4, choices=YEAR_CHOICES,default=datetime.datetime.now().year, blank=True)
+    startyear=models.IntegerField(('startyear'), choices=YEAR_CHOICES, default=datetime.datetime.now().year,blank=True)
+    endyear = models.IntegerField(('endyear'),choices=YEAR_CHOICES,default=datetime.datetime.now().year, blank=True)
     gpa=models.CharField(max_length=1,default=0,blank=True,null=True)
     skills=models.CharField(default="",max_length=200)
     experience=models.TextField(default=" ",max_length=1000)
@@ -65,12 +65,13 @@ class student(models.Model):
 
 
 
+
     def __str__(self):
         return self.name
 class appliedjobs(models.Model):
-
-    jobs = models.ManyToManyField(jobs,null=True)
-    student=models.ManyToManyField(student,null=True)
+    date_created = models.DateField(auto_now_add=True, null=True,blank=True)
+    jobs = models.ManyToManyField(jobs,blank=True)
+    student=models.ManyToManyField(student,blank=True)
 
 
 
