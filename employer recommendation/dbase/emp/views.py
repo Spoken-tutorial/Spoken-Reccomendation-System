@@ -181,6 +181,7 @@ def student_profile(request):
             form.save()
 
     context={'form':form}
+    messages.success(request,"profile updated")
     return render(request,'emp/student_profile.html',context)
 
 #-----------------------------------------------student profile card
@@ -329,22 +330,26 @@ def delete_job(request,pk):
 
 @allowed_users(allowed_roles=['students'])
 def searchjob(request):
-    query=request.GET.get('search')
-    head=[]
-    titlejobs=jobs.objects.values('jobtitle','id')      #list of dict
-
-    title={item['jobtitle'] for item in titlejobs}
-    lst=list(title) # set of job titles
-    print(lst)
-
-    titletemp=jobs.objects.filter(jobtitle=query)
-
-    head=titletemp
-    if query in lst:
-        context={'head':head}
-
-        return render(request,'emp/searchjob.html',context)
+    if request.user.student.name == " ":
+        messages.success(request, 'Create your profile before applying for jobs')
+        return render(request, 'emp/student_section.html')
     else:
+        query=request.GET.get('search')
+        head=[]
+        titlejobs=jobs.objects.values('jobtitle','id')      #list of dict
+
+        title={item['jobtitle'] for item in titlejobs}
+        lst=list(title) # set of job titles
+        print(lst)
+
+        titletemp=jobs.objects.filter(jobtitle=query)
+
+        head=titletemp
+        if query in lst:
+            context={'head':head}
+
+            return render(request,'emp/searchjob.html',context)
+
         return HttpResponse("no item found.Search for job title like Django developer , Java developer")
 
 
@@ -354,9 +359,21 @@ def searchjob(request):
 @allowed_users(allowed_roles=['students'])
 def apply_jobs(request):
     if request.user.student.name==" ":
-        return redirect('profile')
+        messages.success(request, 'Create your profile before applying for jobs')
+        return render(request,'emp/student_section.html')
     else:
-        job=jobs.objects.all()
+        job=[]
+        alljobs = jobs.objects.all()
+        stud = request.user.student
+        ds=stud.skills.split(',')
+        for jobb in alljobs:
+            dj = jobb.jobskills.split(',')
+            for d in ds:
+
+                if d in dj:
+                    job.append(jobb)
+                    break
+        #job=jobs.objects.all()
         s1=request.user.student
 
         total=len(job)
@@ -405,8 +422,51 @@ def jobs_applied(request,pk):
 
     return HttpResponse("404 not found")
 
+@allowed_users(allowed_roles=['employer'])
+def students_to_employer(request):
+    #a1 = appliedjobs.objects.filter(jobs__employer__startswith=request.user.student)
+    name = request.user.employer.jobs_set.all()    # query set of posted jobs
+    student_list=[]
+    lst=[]
 
 
+    #a1 = appliedjobs.objects.filter(jobs=name[0].id)
+    for i in name:
+        lst.append(i)
+        p=i.appliedjobs_set.all()
+        for j in p:
 
+            job_applied=i
+            stud=j.student.all()
 
+            lst.append(stud[0])
+
+        #student_list.append((lst,i.jobtitle))
+        student_list.append(lst)
+        lst=[]
+    print(student_list)
+
+    context={'student_list':student_list}
+    return render(request,'emp/students_to_employer.html',context)
+    return HttpResponse("404 not found")
+
+@allowed_users(allowed_roles=['employer'])
+def student_reoprt(request):
+    name = request.user.employer.jobs_set.all()
+    student_list=[]
+    datas=[]
+
+    for i in name:
+
+        p=i.appliedjobs_set.all()
+        for j in p:
+
+            stud=j.student.all()
+            if stud[0] not in datas:
+                datas.append(stud[0])
+
+    #print(datas)
+    context={'datas':datas}
+    return render(request,'emp/student_report.html',context)
+    return HttpResponse("404 not found")
 
