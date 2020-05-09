@@ -81,21 +81,21 @@ def postjob(request):
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['students'])
 
-class GeneratePdf(View):
-    def get(self, request, *args, **kwargs):
-        context=forstu(request)
 
-        pdf = render_to_pdf('emp/pdf_student.html',context)
-        if pdf:
-            response = HttpResponse(pdf, content_type='application/pdf')
-            filename = "Invoice_%s.pdf" % ("12341231")
-            content = "inline; filename='%s'" % (filename)
-            download = request.GET.get("download")
-            if download:
-                content = "attachment; filename='%s'" % (filename)
-            response['Content-Disposition'] = content
-            return response
-        return HttpResponse("Not found")
+def GeneratePdf(request):
+    context=forstu(request)
+
+    pdf = render_to_pdf('emp/pdf_student.html',context)
+    if pdf:
+        response = HttpResponse(pdf, content_type='application/pdf')
+        filename = "Invoice_%s.pdf" % ("12341231")
+        content = "inline; filename='%s'" % (filename)
+        download = request.GET.get("download")
+        if download:
+            content = "attachment; filename='%s'" % (filename)
+        response['Content-Disposition'] = content
+        return response
+    return HttpResponse("Not found")
 
 
 
@@ -321,6 +321,7 @@ def delete_job(request,pk):
     jb = jobs.objects.get(id=pk)
     if request.method=='POST':
         jb.delete()
+        #messages.success(request,jb.jobtitle +'has been deleted by an employer')
         return redirect('employer')
     context={'item':jb}
     return render(request,'emp/delete_job.html',context)
@@ -438,17 +439,63 @@ def students_to_employer(request):
 
             job_applied=i
             stud=j.student.all()
+           # print(stud[0].skills)
+            sk=[]
+            student_skill=stud[0].skills.split(',')
+            for j in student_skill:
+                j=j.lower()
+                sk.append(j)
+            #print(sk)
+            #print(student_skill)
+            job_skills=i.jobskills.split(',')
+
 
             lst.append(stud[0])
 
         #student_list.append((lst,i.jobtitle))
+        k = len(lst) - 1
+        lst.insert(0,k)
         student_list.append(lst)
-        lst=[]
-    print(student_list)
+        #recom.append(rec_lst)
+        #lst=[]
+
+
+
 
     context={'student_list':student_list}
     return render(request,'emp/students_to_employer.html',context)
     return HttpResponse("404 not found")
+def recommended_jobs(request):
+    name=request.user.employer.jobs_set.all();
+    lst=[]
+    rec_lst=[]
+    sk=[]
+    for i in name:
+
+        p = i.appliedjobs_set.all()
+        for j in p:
+            stud = j.student.all()
+            st_skill=stud[0].skills.split(',')
+            job_skills = i.jobskills.split(',')
+            for j in st_skill:
+                j = j.lower()
+                sk.append(j)
+            st_skill=sk
+            st_skill=set(st_skill)
+            job_skills=set(job_skills)
+            val1 = job_skills.intersection(st_skill)
+            val2=job_skills.union(st_skill)
+            sim=len(val1)/len(val2)
+            print(sim)
+            if sim>0.0:
+                lst.append(stud[0])
+
+        rec_lst.append(lst)
+        lst=[]
+    context={'rec_lst':rec_lst}
+    return  render(request,'emp/students_recomm.html',context)
+    print(rec_lst)
+    return HttpResponse("404")
 
 @allowed_users(allowed_roles=['employer'])
 def student_reoprt(request):

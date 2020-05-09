@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 # Create your models here.
 import datetime
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 
 # employer profile
@@ -74,6 +76,26 @@ class appliedjobs(models.Model):
     student=models.ManyToManyField(student,blank=True)
 
 
+NOTIFICATION_TARGET = (
+    ('1', 'User'),
+    ('2', 'students'),
+    ('3', 'employer')
+)
 
 
+class Notification(models.Model):
+    user = models.ForeignKey(User,
+                             on_delete=models.CASCADE, related_name='notification',null=True)
+    actor = models.CharField(max_length=50)
+    verb = models.CharField(max_length=50)
+    action = models.CharField(max_length=50, blank=True)
+    target = models.CharField(
+        max_length=1, default='1', choices=NOTIFICATION_TARGET)
+    description = models.TextField(blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    #employer = models.ForeignKey(employer, null=True, on_delete=models.CASCADE)
+    #student=models.ForeignKey(student,null=True,on_delete=models.CASCADE)
+    #appliedjobs=models.ForeignKey(appliedjobs,null=True,on_delete=models.CASCADE)
 
+def __str__(self):
+    return f"{self.actor} {self.verb} {self.action} {self.target} at 			{self.timestamp}"

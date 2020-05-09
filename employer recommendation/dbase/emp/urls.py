@@ -19,7 +19,9 @@ urlpatterns = [
     path('deletejob/<str:pk>/', views.delete_job, name='update_job'),
     path('login',views.signin,name='login'),
     path('logout', views.handlelogout, name='logout'),
-
+    path('ets',views.students_to_employer,name='students_to_employer'),
+    path('recommendation',views.recommended_jobs,name="recommendation"),
+    path('repo',views.student_reoprt,name='repo'),
     path('students',views.studentpg,name="student"),
     path('employer', views.company, name="employer"),
     path('student_profile',views.student_profile,name='student_profile'),
