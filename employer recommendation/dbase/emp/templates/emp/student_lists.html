@@ -1,0 +1,103 @@
+{% extends 'emp/base.html' %}
+
+{% block text %}
+
+{{jb.jobtitle}}
+
+{% endblock %}
+
+
+{% block nav %}
+
+    <!-- Nav Item - Tables -->
+
+
+
+
+
+
+  <li class="nav-item">
+        <a class="nav-link" href="{% url 'employer' %}">
+      <i class="fas fa-user-tie"></i>
+          <span>Main Section</span></a>
+      </li>
+
+
+ <li class="nav-item">
+        <a class="nav-link" href="logout">
+          <i class="fas fa-user-graduate"></i>
+          <span>Log out</span></a>
+      </li>
+
+{% endblock %}
+{% block content %}
+{% load static %}
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<div class="row">
+	<div class="col-md">
+		<div class="card card-body">
+			<table class="table table-sm">
+				<tr>
+
+
+				  <th>Name</th>
+                    <th>Education</th>
+                    <th>skills</th>
+                    <th>test score</th>
+                    <th>Status</th>
+
+				</tr>
+            {% for i in lst %}
+
+
+
+
+
+
+
+                <tr>
+
+
+                    <td>
+                       <a href="my_report/{{i.id}}">{{i.name}}</a></td>
+
+                    <td>{{i.education}}</td>
+					<td>{{i.skills}}</td>
+					<td>{{i.Spokentest_score}}</td>
+                       <td>{{i.status}}</td>
+
+
+
+
+
+
+				</tr>
+				{% endfor %}
+
+
+
+			</table>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+

@@ -14,6 +14,7 @@ from .utils import render_to_pdf
 from django.template.loader import get_template
 import datetime
 
+
 # function for retrieving students profile
 def forstu(request):
     name = request.user.student.name
@@ -149,6 +150,8 @@ def signin(request):
 def studentpg(request):
 
     if request.user.student.name==" ":
+        job=jobs.objects.all()
+
         return render(request, 'emp/student_section.html')
     else:
 
@@ -219,6 +222,7 @@ def employer_profile(request):
 def company(request):
     name=request.user.employer.jobs_set.all()
     details=request.user.employer
+
     context={'name':name,'details':details}
     return render(request,'emp/employer_section.html',context)
 
@@ -311,7 +315,38 @@ def update_job(request,pk):
 
 
     return render(request,'emp/createjob.html',context)
+def apply_to_particular(request,pk):
+    jb=jobs.objects.get(id=pk)
+    cp=request.user.employer
+    name=request.user.employer.jobs_set.all()
+    lst=[]
+    if jb in name:
+        p=jb.appliedjobs_set.all()
+        k=len(p)
+        for j in p:
 
+            stud = j.student.all()
+            lst.append(stud[0])
+        print(lst)
+
+    company_name=jb.employer.company_name
+    print(company_name)
+    context={'item':jb,'appli':k,'stu':lst}
+    return render(request,'emp/company_card.html',context)
+
+def student_list(request,pk,pk1):
+    jb=jobs.objects.get(id=pk)
+    name = request.user.employer.jobs_set.all()
+    lst = []
+    if jb in name:
+        p = jb.appliedjobs_set.all()
+        k = len(p)
+        for j in p:
+            stud = j.student.all()
+            lst.append(stud[0])
+            print(stud[0].id)
+    context = {'lst': lst,'jb':jb}
+    return render(request,'emp/student_lists.html',context)
 #!-------------------------------------------------Delete job details
 #-------------------------- for employers
 
@@ -337,19 +372,21 @@ def searchjob(request):
     else:
         query=request.GET.get('search')
         head=[]
+        query=str(query)
+
         titlejobs=jobs.objects.values('jobtitle','id')      #list of dict
 
         title={item['jobtitle'] for item in titlejobs}
         lst=list(title) # set of job titles
         print(lst)
 
-        titletemp=jobs.objects.filter(jobtitle=query)
+        titletemp=jobs.objects.filter(jobskills__icontains=query)
 
         head=titletemp
-        if query in lst:
-            context={'head':head}
 
-            return render(request,'emp/searchjob.html',context)
+        context={'head':head}
+
+        return render(request,'emp/searchjob.html',context)
 
         return HttpResponse("no item found.Search for job title like Django developer , Java developer")
 
@@ -516,4 +553,13 @@ def student_reoprt(request):
     context={'datas':datas}
     return render(request,'emp/student_report.html',context)
     return HttpResponse("404 not found")
+
+def my_report(request,pk1,pk2,pk):
+    su=student.objects.get(id=pk)
+    print(su)
+    context={'data':su}
+    return render(request, 'emp/student_report.html', context)
+
+
+
 
