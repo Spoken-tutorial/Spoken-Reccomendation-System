@@ -1,15 +1,18 @@
 from django.contrib import admin
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from  . import views
+from  .import views
 from .views import GeneratePdf
 urlpatterns = [
-    path('apply/jobsapplied/<str:pk>/',views.jobs_applied,name="appliedjobs"),
-
+    path('jobsapplied/<str:pk>/',views.jobs_applied,name="appliedjobs"),
+    path('apply_job/<str:pk>/',views.apply_to_particular,name='apply_job'),
     path('search',views.searchjob,name='search'),
+    path('apply_job/<str:pk1>/lists/<str:pk>/',views.student_list,name='lists'),
+    path('apply_job/<str:pk2>/lists/<str:pk1>/my_report/<str:pk>/',views.my_report,name='my_report'),
     path('pdf',views.GeneratePdf,name="gp"),
-    path('',views.index,name="index"),
-    path('apply/', views.apply_jobs, name="apply"),
+    path('',views.index,name='index'),
+    path('company/<str:pk>/', views.company_info, name="company_info"),
+    path('apply', views.apply_jobs, name="apply"),
     path('post_jobs',views.postjob,name="post_jobs"),
     path('results/',views.recommend,name="results"),
     path('profile_page',views.student_page,name='profile_page'),
@@ -22,6 +25,9 @@ urlpatterns = [
     path('ets',views.students_to_employer,name='students_to_employer'),
     path('recommendation',views.recommended_jobs,name="recommendation"),
     path('repo',views.student_reoprt,name='repo'),
+    path('search1',views.search_job_skills,name='search1'),
+    path('search2',views.search_job_title,name='search2'),
+    path('search3',views.recruiters,name='search3'),
     path('students',views.studentpg,name="student"),
     path('employer', views.company, name="employer"),
     path('student_profile',views.student_profile,name='student_profile'),

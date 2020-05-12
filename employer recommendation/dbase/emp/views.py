@@ -414,9 +414,12 @@ def apply_jobs(request):
         #job=jobs.objects.all()
         s1=request.user.student
 
+
         total=len(job)
         #print(job)
         context={'job':job}
+
+
 
         return render(request,'emp/apply.html',context)
     return HttpResponse("404 NOT FOUND")
@@ -426,6 +429,13 @@ def apply_jobs(request):
 # used appliedjobs models to access (many to many field)
 @allowed_users(allowed_roles=['students'])
 
+def company_info(request,pk):
+    jb=jobs.objects.get(id=pk)
+    p=jb.appliedjobs_set.all()
+    k=len(p)
+    print(jb.employer.company_name)
+    context={'item':jb,'appli':k}
+    return render(request,'emp/info_company.html',context)
 
 def jobs_applied(request,pk):
     application=appliedjobs.objects.all()
@@ -559,6 +569,60 @@ def my_report(request,pk1,pk2,pk):
     print(su)
     context={'data':su}
     return render(request, 'emp/student_report.html', context)
+
+
+#---------------------------------------------------------MAIN  PAGE SEARCH FUNCTIONS-----------------------------------
+
+
+def search_job_skills(request):
+
+        query = request.GET.get('search1')
+        head = []
+        query = str(query)
+
+        titletemp = jobs.objects.filter(jobskills__icontains=query)
+
+
+        head = titletemp
+        if len(head)>=1:
+
+            context = {'head': head}
+
+            return render(request, 'emp/search_job_skills.html', context)
+        else:
+           return render(request,'emp/not_found.html')
+
+
+def search_job_title(request):
+    query = request.GET.get('search2')
+    head = []
+    query = str(query)
+
+    titletemp = jobs.objects.filter(jobtitle__icontains=query)
+
+    head = titletemp
+    if len(head) >= 1:
+
+        context = {'head': head}
+
+        return render(request, 'emp/search_job_title.html', context)
+    else:
+        return render(request, 'emp/not_found.html')
+
+def recruiters(request):
+    query = request.GET.get('search3')
+    title=employer.objects.filter(company_name__icontains=query)
+    print(title)
+    head=[]
+    head=title
+    if len(head)>=1:
+        context = {'head': head}
+
+        return render(request, 'emp/recruiters.html', context)
+    else:
+        return render(request, 'emp/not_found.html')
+
+
 
 
 
