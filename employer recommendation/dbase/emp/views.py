@@ -338,15 +338,66 @@ def student_list(request,pk,pk1):
     jb=jobs.objects.get(id=pk)
     name = request.user.employer.jobs_set.all()
     lst = []
+    sk=[]
+    lst_recom=[]
     if jb in name:
         p = jb.appliedjobs_set.all()
         k = len(p)
         for j in p:
             stud = j.student.all()
+            st_skill = stud[0].skills.split(',')
+            job_skills = jb.jobskills.split(',')
+            for j in st_skill:
+                j = j.lower()
+                sk.append(j)
+            st_skill=sk
+            st_skill = set(st_skill)
+            job_skills = set(job_skills)
+            val1 = job_skills.intersection(st_skill)
+            val2 = job_skills.union(st_skill)
+            sim = len(val1) / len(val2)
+            print(sim)
+            if sim>=0.25:
+                lst_recom.append(stud[0])
+            print(lst_recom)
             lst.append(stud[0])
             print(stud[0].id)
-    context = {'lst': lst,'jb':jb}
+    context = {'lst': lst,'jb':jb,'lst_recom':lst_recom}
+
     return render(request,'emp/student_lists.html',context)
+
+def recommended_jobs(request):
+    name=request.user.employer.jobs_set.all()
+
+    lst=[]
+    rec_lst=[]
+    sk=[]
+    for jb in name:
+        p=jb.appliedjobs_set.all()
+        for j in p:
+            stud = j.student.all()
+            st_skill=stud[0].skills.split(',')
+            job_skills = jb.jobskills.split(',')
+            for j in st_skill:
+                j = j.lower()
+                sk.append(j)
+            st_skill=sk
+            st_skill=set(st_skill)
+            job_skills=set(job_skills)
+            val1 = job_skills.intersection(st_skill)
+            val2=job_skills.union(st_skill)
+            sim=len(val1)/len(val2)
+            print(sim)
+            if sim>0.0:
+                lst.append(stud[0])
+
+        rec_lst.append(lst)
+        lst=[]
+    context={'rec_lst':rec_lst}
+    return  render(request,'emp/students_recomm.html',context)
+    print(rec_lst)
+    return HttpResponse("404")
+
 #!-------------------------------------------------Delete job details
 #-------------------------- for employers
 
@@ -512,37 +563,7 @@ def students_to_employer(request):
     context={'student_list':student_list}
     return render(request,'emp/students_to_employer.html',context)
     return HttpResponse("404 not found")
-def recommended_jobs(request):
-    name=request.user.employer.jobs_set.all();
-    lst=[]
-    rec_lst=[]
-    sk=[]
-    for i in name:
 
-        p = i.appliedjobs_set.all()
-        for j in p:
-            stud = j.student.all()
-            st_skill=stud[0].skills.split(',')
-            job_skills = i.jobskills.split(',')
-            for j in st_skill:
-                j = j.lower()
-                sk.append(j)
-            st_skill=sk
-            st_skill=set(st_skill)
-            job_skills=set(job_skills)
-            val1 = job_skills.intersection(st_skill)
-            val2=job_skills.union(st_skill)
-            sim=len(val1)/len(val2)
-            print(sim)
-            if sim>0.0:
-                lst.append(stud[0])
-
-        rec_lst.append(lst)
-        lst=[]
-    context={'rec_lst':rec_lst}
-    return  render(request,'emp/students_recomm.html',context)
-    print(rec_lst)
-    return HttpResponse("404")
 
 @allowed_users(allowed_roles=['employer'])
 def student_reoprt(request):
