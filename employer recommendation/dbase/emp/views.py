@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render,HttpResponse,redirect
-from .models import student,employer,jobs,appliedjobs
+from .models import student,employer,jobs,appliedjobs,Contact
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
@@ -13,7 +13,8 @@ from django.views.generic import View
 from .utils import render_to_pdf
 from django.template.loader import get_template
 import datetime
-
+from django.core.mail import send_mail
+from django.conf import settings
 
 # function for retrieving students profile
 def forstu(request):
@@ -45,7 +46,38 @@ def forstu(request):
 def index(request):
     if request.user.is_authenticated:
         return redirect('student')
-    return render(request,'emp/main_index.html')
+    jb=jobs.objects.all()
+    print(jb)
+
+    jb1=jb[:3]
+    print(jb1)
+    #head1=jb1
+    head2=jb[:5]
+
+    jo=len(jb)
+    jb.reverse()
+    head1=jb[(jo-3):]
+    print(jb[jo-1])
+    js=student.objects.all()
+    j1=len(js)
+    emplo=employer.objects.all()
+    emplo1=len(emplo)
+    if request.method =='POST':
+
+        email=request.POST['email_user']
+        comment=request.POST['comment_user']
+        con=Contact(email=email,comment=comment)
+        con.save()
+        send_mail('Spoken Recommendation', 'Thank You for contacting us! we will reach to you soon'
+                  , settings.EMAIL_HOST_USER,
+                  [email],fail_silently=False
+                  )
+        messages.success(request,'Thank you! We will reach you soon ')
+
+
+    context={'head1':head1,'head2':head2,'j1':j1,'emplo1':emplo1,'jo':jo}
+
+    return render(request,'emp/main_index.html',context)
 
 
 # student section
@@ -250,7 +282,7 @@ def registerpage_student(request):
                 group=Group.objects.get(name='students')
                 user.groups.add(group)
                 student.objects.create(user=user,)
-                messages.success(request,'Account was created for '+ username)
+                #messages.success(request,'Account was created for '+ username)
                 return redirect("login")
         context={'form':form}
         return render(request,'emp/reg.html',context)
@@ -272,6 +304,7 @@ def registerpage_employer(request):
                 username = form.cleaned_data.get('username')
                 group=Group.objects.get(name='employer')
                 user.groups.add(group)
+
                 employer.objects.create(user=user,)
                 messages.success(request, 'Account was created for ' + username)
                 return redirect("login")
@@ -642,6 +675,8 @@ def recruiters(request):
         return render(request, 'emp/recruiters.html', context)
     else:
         return render(request, 'emp/not_found.html')
+
+
 
 
 

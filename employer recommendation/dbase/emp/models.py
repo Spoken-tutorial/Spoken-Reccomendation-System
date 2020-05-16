@@ -10,10 +10,10 @@ from django.db.models.signals import post_save
 class employer(models.Model):
     user=models.OneToOneField(User, null=True,blank=True,on_delete=models.CASCADE)
     emp_name=models.CharField(default=" ",max_length=50)
-    company_name=models.CharField(max_length=50)
+    company_name=models.CharField(max_length=300)
     logo=models.ImageField(default='pro1.png',null=True, blank=True)
-    company_description = models.TextField(max_length=200,default=" ")
-    emp_field=models.CharField(default=" ",max_length=50)
+    company_description = models.TextField(max_length=2000,default=" ")
+    emp_field=models.CharField(default=" ",max_length=400)
     date_created = models.DateField(auto_now_add=True, null=True)
     e_pic=models.ImageField(default='pro1.png',null=True, blank=True)
 
@@ -24,14 +24,15 @@ class employer(models.Model):
 # jobs he want to post
 class jobs(models.Model):
 
-    jobtitle=models.CharField(max_length=20,default=" ")
-    joblocation=models.CharField(max_length=20)
-    jobskills=models.TextField(max_length=50)
-    jobdescription=models.TextField(max_length=200)
+    jobtitle=models.CharField(max_length=200,default=" ")
+    joblocation=models.CharField(max_length=200)
+    jobskills=models.TextField(max_length=500)
+    jobdescription=models.TextField(max_length=2000)
     jobcategory=models.CharField(max_length=100,default=" ")
-    criteria= models.CharField(max_length=100,default=" ")
+    criteria= models.CharField(max_length=1000,default=" ")
     employer=models.ForeignKey(employer,null=True,on_delete=models.CASCADE)
     date_created = models.DateField(auto_now_add=True, null=True)
+
     status = models.CharField(default="On Review", max_length=50, null=True, blank=True)
 
     def __str__(self):
@@ -68,9 +69,11 @@ class student(models.Model):
 
 
 
+
     def __str__(self):
         return self.name
 class appliedjobs(models.Model):
+
     date_created = models.DateField(auto_now_add=True, null=True,blank=True)
     jobs = models.ManyToManyField(jobs,blank=True)
     student=models.ManyToManyField(student,blank=True)
@@ -99,3 +102,13 @@ class Notification(models.Model):
 
 def __str__(self):
     return f"{self.actor} {self.verb} {self.action} {self.target} at 			{self.timestamp}"
+
+
+
+class Contact(models.Model):
+
+    email=models.CharField(max_length=50,default=" ")
+    comment=models.CharField(max_length=200,default=" ")
+
+    def __str__(self):
+        return self.email
