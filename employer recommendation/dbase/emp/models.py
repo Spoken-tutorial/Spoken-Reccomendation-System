@@ -58,6 +58,7 @@ class student(models.Model):
     experience=models.TextField(default=" ",max_length=1000)
 
 
+
     Spokentest_score = models.FloatField(default=0.0)
     about=models.TextField(max_length=2000, default=" ", blank=True, null=True)
     pic = models.ImageField(default='pro1.png',null=True, blank=True)
@@ -112,3 +113,38 @@ class Contact(models.Model):
 
     def __str__(self):
         return self.email
+class contact_stu(models.Model):
+    name=models.CharField(max_length=100,default='')
+    email=models.CharField(max_length=200,default='')
+    message=models.TextField(max_length=500,default='')
+
+
+    def __str__(self):
+        return self.name
+
+
+
+
+
+
+class rate(models.Model):
+    name=models.CharField(max_length=100,blank=False)
+    email=models.CharField(max_length=100,blank=False)
+    rating=models.IntegerField(blank=True)
+    suggestion=models.TextField(blank=False,max_length=500)
+    reply=models.TextField(blank=True,max_length=1000)
+
+    def __str__(self):
+        return self.name
+
+class student_status(models.Model):
+    student=models.ForeignKey(student, null=True, on_delete=models.CASCADE)
+    jobs=models.ForeignKey(jobs,null=True,on_delete=models.CASCADE)
+
+    comp=models.CharField(max_length=100,blank=False,default='')
+    ename=models.CharField(max_length=100,blank=False,default='')
+    jtitle=models.CharField(max_length=200,blank=False,default='')
+    statu=models.IntegerField(blank=True)
+
+    def __str__(self):
+        return self.jtitle
