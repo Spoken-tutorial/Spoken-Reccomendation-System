@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render,HttpResponse,redirect
-from .models import student,employer,jobs,appliedjobs,Contact
+from .models import student,employer,jobs,appliedjobs,Contact,contact_stu,rate,student_status,Post,blogcomment
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
@@ -15,6 +15,7 @@ from django.template.loader import get_template
 import datetime
 from django.core.mail import send_mail
 from django.conf import settings
+
 
 # function for retrieving students profile
 def forstu(request):
@@ -73,9 +74,27 @@ def index(request):
                   [email],fail_silently=False
                   )
         messages.success(request,'Thank you! We will reach you soon ')
+    r=rate.objects.all()
+    lst_rating=[]
+    for i in r:
+        lst_rating.append(i.rating)
+    lt=len(lst_rating)
+    sr1=lst_rating.count(1)
+    sr2=lst_rating.count(2)
+    sr3=lst_rating.count(3)
+    sr4=lst_rating.count(4)
+    sr5=lst_rating.count(5)
+
+    s1=(sr1/lt)*100
+    s2=(sr2/lt)*100
+    s3=(sr3/lt)*100
+    s4=(sr4/lt)*100
+    s5=(sr5/lt)*100
 
 
-    context={'head1':head1,'head2':head2,'j1':j1,'emplo1':emplo1,'jo':jo}
+
+
+    context={'head1':head1,'head2':head2,'j1':j1,'emplo1':emplo1,'jo':jo,'lt':lt,'s1':s1,'s2':s2,'s3':s3,'s4':s4,'s5':s5,'sr1':sr1,'sr2':sr2,'sr3':sr3,'sr4':sr4,'sr5':sr5,}
 
     return render(request,'emp/main_index.html',context)
 
@@ -170,7 +189,36 @@ def signin(request):
                 messages.info(request, 'username or password is incorrect')
         return render(request,'emp/login.html')
 
+def job_gallery():
+    name =jobs.objects.all()
 
+    lst = []
+    rec_lst = []
+    sk = []
+    for jb in name:
+        p = jb.appliedjobs_set.all()
+        for j in p:
+            stud = j.student.all()
+            st_skill = stud[0].skills.split(',')
+            job_skills = jb.jobskills.split(',')
+            for j in st_skill:
+                j = j.lower()
+                sk.append(j)
+            st_skill = sk
+            st_skill = set(st_skill)
+            job_skills = set(job_skills)
+            val1 = job_skills.intersection(st_skill)
+            val2 = job_skills.union(st_skill)
+            sim = len(val1) / len(val2)
+            print(sim)
+            if sim > 0.0:
+                lst.append(stud[0])
+
+        rec_lst.append(lst)
+        lst = []
+
+
+    return rec_lst
 
 @login_required(login_url='login')
 @employers_only
@@ -180,13 +228,31 @@ def signin(request):
 
 
 def studentpg(request):
+    jb = jobs.objects.all()
 
+    jo = len(jb)
+
+    head1 = jb[(jo - 5):]
+
+    emplo = employer.objects.all()
+    emplo1 = len(emplo)
+    uname=request.user.student.name
+
+
+
+    s=[]
+    context = {'head1': head1,'s':s}
     if request.user.student.name==" ":
-        job=jobs.objects.all()
 
-        return render(request, 'emp/student_section.html')
+        #job=jobs.objects.all()
+        print(s)
+
+
+
+
+        return render(request, 'emp/student_section.html',context)
     else:
-
+        ustatus=1
         a1 = appliedjobs.objects.filter(student__name__startswith=request.user.student)
         if len(a1)==1:
 
@@ -194,12 +260,31 @@ def studentpg(request):
         # print(a1.student.all())
 
             data = a1[0].jobs.all()
-            context = {'data': data, 'date': date}
 
+            s.append(request.user.student.mail)
+            k=len(data)
+            print(s)
+            data=data[0:10]
+            context = {'data': data, 'date': date,'head1':head1,'s':s}
             return render(request,'emp/student_section.html',context)
 
 
-    return render(request, 'emp/student_section.html')
+
+    return render(request, 'emp/student_section.html',context)
+
+
+def more_jobs(request):
+    a1 = appliedjobs.objects.filter(student__name__startswith=request.user.student)
+    if len(a1) == 1:
+        date = a1[0].date_created
+    # print(a1.student.all())
+
+    data = a1[0].jobs.all()
+    k = len(data)
+
+    context = {'data': data, 'date': date}
+    return render(request, 'emp/jobs_more.html', context)
+
 
 # only students
 #----------------------------------------------for student profile settings
@@ -214,9 +299,15 @@ def student_profile(request):
         form=studentform(request.POST, request.FILES,instance=student)
         if form.is_valid():
             form.save()
+            messages.success(request, "your profile has been created! Now you can apply for jobs")
 
-    context={'form':form}
-    messages.success(request,"profile updated")
+    name=student.name
+    print(len(name))
+    k=len(name)
+    k=k-1
+    s=k
+    context={'form':form,'k':k,'s':s}
+    #messages.success(request,"profile updated")
     return render(request,'emp/student_profile.html',context)
 
 #-----------------------------------------------student profile card
@@ -363,7 +454,7 @@ def apply_to_particular(request,pk):
         print(lst)
 
     company_name=jb.employer.company_name
-    print(company_name)
+    #print(company_name)
     context={'item':jb,'appli':k,'stu':lst}
     return render(request,'emp/company_card.html',context)
 
@@ -371,6 +462,7 @@ def student_list(request,pk,pk1):
     jb=jobs.objects.get(id=pk)
     name = request.user.employer.jobs_set.all()
     lst = []
+    selected=[]
     sk=[]
     lst_recom=[]
     if jb in name:
@@ -393,42 +485,41 @@ def student_list(request,pk,pk1):
             if sim>=0.25:
                 lst_recom.append(stud[0])
             print(lst_recom)
+
+            #s = student_status.objects.filter(name=stud[0].name)
+
+
+
+
             lst.append(stud[0])
-            print(stud[0].id)
-    context = {'lst': lst,'jb':jb,'lst_recom':lst_recom}
+
+    jt = student_status.objects.filter(jobs_id=jb)
+    for i in jt:
+        if i.student.name not in selected:
+            selected.append(i.student.name)
+    #selected.append(jt)
+    print(selected)
+
+
+
+
+    context = {'lst': lst,'jb':jb,'lst_recom':lst_recom,'selected':selected}
+
+
+
+
+
 
     return render(request,'emp/student_lists.html',context)
 
+
+
 def recommended_jobs(request):
-    name=request.user.employer.jobs_set.all()
 
-    lst=[]
-    rec_lst=[]
-    sk=[]
-    for jb in name:
-        p=jb.appliedjobs_set.all()
-        for j in p:
-            stud = j.student.all()
-            st_skill=stud[0].skills.split(',')
-            job_skills = jb.jobskills.split(',')
-            for j in st_skill:
-                j = j.lower()
-                sk.append(j)
-            st_skill=sk
-            st_skill=set(st_skill)
-            job_skills=set(job_skills)
-            val1 = job_skills.intersection(st_skill)
-            val2=job_skills.union(st_skill)
-            sim=len(val1)/len(val2)
-            print(sim)
-            if sim>0.0:
-                lst.append(stud[0])
-
-        rec_lst.append(lst)
-        lst=[]
+    rec_lst=job_gallery()
     context={'rec_lst':rec_lst}
     return  render(request,'emp/students_recomm.html',context)
-    print(rec_lst)
+
     return HttpResponse("404")
 
 #!-------------------------------------------------Delete job details
@@ -452,7 +543,7 @@ def delete_job(request,pk):
 def searchjob(request):
     if request.user.student.name == " ":
         messages.success(request, 'Create your profile before applying for jobs')
-        return render(request, 'emp/student_section.html')
+        return redirect('/')
     else:
         query=request.GET.get('search')
         head=[]
@@ -467,6 +558,8 @@ def searchjob(request):
         titletemp=jobs.objects.filter(jobskills__icontains=query)
 
         head=titletemp
+        if len(head)==0:
+            return render(request, 'emp/not_found.html')
 
         context={'head':head}
 
@@ -520,12 +613,24 @@ def company_info(request,pk):
     print(jb.employer.company_name)
     context={'item':jb,'appli':k}
     return render(request,'emp/info_company.html',context)
+def latest_update():
+    jb = jobs.objects.all()
+
+    jo = len(jb)
+
+    head1 = jb[(jo - 3):]
+
+    emplo = employer.objects.all()
+    emplo1 = len(emplo)
+    context={'head1':head1}
+    return context
 
 def jobs_applied(request,pk):
     application=appliedjobs.objects.all()
     st=request.user.student                          #student object
     jb = jobs.objects.get(id=pk)                     # job object
     #print(jb.jobskills)
+    context1=latest_update()
     a1=appliedjobs.objects.filter(student__name__startswith=request.user.student)                                #applied objects
     if len(a1)==1:
         a1[0].jobs.add(jb)
@@ -536,7 +641,7 @@ def jobs_applied(request,pk):
 
         data=a1[0].jobs.all()
         context={'data':data,'date':date}
-        return render(request,'emp/student_section.html',context)
+        return redirect('/')
     else:
         a1=appliedjobs()
         a1.save()
@@ -546,7 +651,8 @@ def jobs_applied(request,pk):
         data = a1.jobs.all()
         date = a1.date_created
         context = {'data': data, 'date': date}
-        return render(request, 'emp/student_section.html', context)
+        messages.success(request, "Your application has been sent successfully for")
+        return redirect('/')
 
     #print(application[1].student.all())  student object
     #print(application[1].jobs.all())         jobs applied object
@@ -681,5 +787,136 @@ def recruiters(request):
 
 
 
+def contact_student(request):
+    if request.method=='POST':
+        name=request.user
+        email=request.user.email
+        message=request.POST['message']
+        ask=contact_stu(name=name,email=email,message=message)
+        ask.save()
+        send_mail('Spoken Recommendation', 'Thank You for contacting us! we will reach to you soon'
+                  , settings.EMAIL_HOST_USER,
+                  [email], fail_silently=False
+                  )
+        return redirect('student')
 
+
+
+def feedback(request):
+    if request.method=='POST':
+        name=request.POST['name1']
+        email1=request.POST['email1']
+        rating=request.POST['ur']
+
+        suggestion=request.POST['message']
+
+        user_rate=rate(name=name,email=email1,rating=rating,suggestion=suggestion)
+        user_rate.save()
+
+
+        return redirect('/')
+
+
+
+    return render(request,'emp/rate.html')
+
+def accept(request,pk,pk1,pk2,pk3):
+
+    st=student.objects.get(id=pk)
+    jb=jobs.objects.get(id=pk3)
+
+    comp=jb.employer.company_name
+    ename=jb.employer.emp_name
+    jtitle=jb.jobtitle
+
+    statu=1
+
+    db=student_status(student=st,jobs=jb,comp=comp,ename=ename,jtitle=jtitle,statu=statu)
+    db.save()
+
+
+
+    p = st.appliedjobs_set.all()
+    print(jb)
+    return redirect('/')
+def blogHome(request):
+    allPosts=Post.objects.all()
+    context={'allPosts':allPosts}
+    return render(request,'emp/blogHome.html',context)
+
+def blogPost(request, slug):
+    article=Post.objects.filter(slug=slug).first()
+    comments=blogcomment.objects.filter(post=article,parent=None)
+    replies = blogcomment.objects.filter(post=article).exclude(parent=None)
+    repdict={}
+    for reply in replies:
+        if reply.parent.sno not in repdict.keys():
+            repdict[reply.parent.sno]=[reply]
+        else:
+            repdict[reply.parent.sno].append(reply)
+    context={'article':article,'comments':comments,'user':request.user,'repdict':repdict}
+    return render(request,'emp/blogPost.html',context)
+
+
+def postcomment(request):
+    if request.method=="POST":
+        comment=request.POST.get("comment")
+        user=request.user
+        postsno=request.POST.get("postsno")
+        post=Post.objects.get(sno=postsno)
+        parentsno=request.POST.get('parentsno')
+        if parentsno=="":
+            comm = blogcomment(comment=comment, user=user, post=post)
+            comm.save()
+            messages.success(request, "comment posted")
+        else:
+            parent=blogcomment.objects.get(sno=parentsno)
+            comm = blogcomment(comment=comment, user=user, post=post,parent=parent)
+
+
+
+
+
+            comm.save()
+            messages.success(request,"reply posted")
+    return redirect(f"/blog/{post.slug}")
+
+
+def blogStudenthome(request):
+    allPosts = Post.objects.all()
+    context = {'allPosts': allPosts}
+    return render(request, 'emp/blogStudent_home.html', context)
+
+def studentblogPost(request,slug):
+    article = Post.objects.filter(slug=slug).first()
+    comments = blogcomment.objects.filter(post=article, parent=None)
+    replies = blogcomment.objects.filter(post=article).exclude(parent=None)
+    repdict = {}
+    for reply in replies:
+        if reply.parent.sno not in repdict.keys():
+            repdict[reply.parent.sno] = [reply]
+        else:
+            repdict[reply.parent.sno].append(reply)
+    context = {'article': article, 'comments': comments, 'user': request.user, 'repdict': repdict}
+    return render(request, 'emp/blogStudent_post.html', context)
+
+
+def studentpostcomment(request):
+    if request.method == "POST":
+        comment = request.POST.get("comment")
+        user = request.user
+        postsno = request.POST.get("postsno")
+        post = Post.objects.get(sno=postsno)
+        parentsno = request.POST.get('parentsno')
+        if parentsno == "":
+            comm = blogcomment(comment=comment, user=user, post=post)
+            comm.save()
+            messages.success(request, "comment posted")
+        else:
+            parent = blogcomment.objects.get(sno=parentsno)
+            comm = blogcomment(comment=comment, user=user, post=post, parent=parent)
+
+            comm.save()
+            messages.success(request, "reply posted")
+    return redirect(f"/blogstudent/{post.slug}")
 
