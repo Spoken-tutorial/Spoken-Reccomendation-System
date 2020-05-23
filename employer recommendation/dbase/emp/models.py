@@ -174,3 +174,26 @@ class blogcomment(models.Model):
     def __str__(self):
         return self.comment[0:13]+"..."+'by'+" "+self.user.username
 
+
+
+class pay(models.Model):
+    order_id = models.AutoField(primary_key=True)
+    #items_json = models.CharField(max_length=5000)
+    amount = models.IntegerField( default=0)
+    #name = models.CharField(max_length=90,default='')
+    #email = models.CharField(max_length=111)
+    address = models.CharField(max_length=111,default='')
+    #city = models.CharField(max_length=111)
+    #state = models.CharField(max_length=111)
+    employer = models.ForeignKey(employer, null=True, on_delete=models.CASCADE)
+    zip_code = models.CharField(max_length=111)
+    phone = models.CharField(max_length=111, default="")
+
+class payUpdate(models.Model):
+    update_id  = models.AutoField(primary_key=True)
+    order_id = models.IntegerField(default="")
+    update_desc = models.CharField(max_length=5000)
+    timestamp = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.update_desc[0:7] + "..."
