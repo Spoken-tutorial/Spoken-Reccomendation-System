@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render,HttpResponse,redirect
-from .models import student,employer,jobs,appliedjobs,Contact,contact_stu,rate,student_status,Post,blogcomment
+from .models import student,employer,jobs,appliedjobs,Contact,contact_stu,rate,student_status,Post,blogcomment,pay,payUpdate
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
@@ -15,7 +15,8 @@ from django.template.loader import get_template
 import datetime
 from django.core.mail import send_mail
 from django.conf import settings
-
+from django.views.decorators.csrf import csrf_exempt
+from payTm import Checksum
 
 # function for retrieving students profile
 def forstu(request):
@@ -919,4 +920,62 @@ def studentpostcomment(request):
             comm.save()
             messages.success(request, "reply posted")
     return redirect(f"/blogstudent/{post.slug}")
+
+
+def checkout(request):
+    if request.method=="POST":
+
+        #name = request.POST.get('name', '')
+        amount =1000
+        cmp=request.user.employer
+        email = request.user.email
+        address = request.POST.get('address1', '') + " " + request.POST.get('address2', '')
+        #city = request.POST.get('city', '')
+        #state = request.POST.get('state', '')
+        zip_code = request.POST.get('zip_code', '')
+        phone = request.POST.get('phone', '')
+        order =pay(address=address,zip_code=zip_code, phone=phone, amount=amount,employer=cmp)
+        order.save()
+        update =payUpdate(order_id=order.order_id, update_desc="The order has been placed")
+        update.save()
+        thank = True
+        id = order.order_id
+        #return render(request, 'home/payment.html', {'thank':thank, 'id': id})
+        # Request payTm to transfer the amount to your account after payment by user
+        param_dict = {
+
+                'MID': 'xNKSRQ79886016844144',
+                'ORDER_ID': str(order.order_id),
+                'TXN_AMOUNT': str(amount),
+                'CUST_ID': email,
+                'INDUSTRY_TYPE_ID': 'Retail',
+                'WEBSITE': 'WEBSTAGING',
+                'CHANNEL_ID': 'WEB',
+                'CALLBACK_URL':'http://127.0.0.1:8000/handlerequest/',
+
+        }
+        param_dict['CHECKSUMHASH'] = Checksum.generate_checksum(param_dict, MERCHANT_KEY)
+        return render(request, 'emp/paytm.html', {'param_dict': param_dict})
+
+    return render(request, 'emp/payment.html')
+MERCHANT_KEY='W99e!qdOe56Wwt8i'
+@csrf_exempt
+def handlerequest(request):
+    form=request.POST
+    response_dict = {}
+    for i in form.keys():
+        response_dict[i] = form[i]
+        if i == 'CHECKSUMHASH':
+            checksum = form[i]
+
+    verify = Checksum.verify_checksum(response_dict, MERCHANT_KEY, checksum)
+    if verify:
+        if response_dict['RESPCODE'] == '01':
+            print('order successful')
+        else:
+            print('order was not successful because' + response_dict['RESPMSG'])
+    return render(request, 'home/paymentstatus.html', {'response': response_dict})
+
+
+
 
