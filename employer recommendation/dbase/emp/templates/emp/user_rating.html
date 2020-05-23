@@ -1,0 +1,97 @@
+
+{% load static %}
+
+
+<html>
+<head>
+<link rel="stylesheet" href="{% static "emp/css/style7.css" %}">
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+
+<div class="container contact-form">
+     <a href="students" class="btn btn-success" role="button" >Back to main section</a>
+            <div class="contact-image">
+
+                <img src="https://image.ibb.co/kUagtU/rocket_contact.png" alt="rocket_contact"/>
+            </div>
+            <form method="post" action="">
+                    {% csrf_token %}
+                <h3>Feedback</h3>
+               <div class="row">
+                    <div class="col-md-6">
+
+
+
+                        <div class="form-group">
+                            <input type="submit" name="btnSubmit" class="btnContact" value="Send Message" />
+                        </div>
+                    </div>
+
+
+    <form action="" method="post">{% csrf_token %}
+  <div class="form-group">
+
+         <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" class="form-control" id="name" name='name' placeholder="Enter your name">
+        </div>
+
+ <div class="form-group">
+    <label for="name">Email</label>
+    <input type="text" class="form-control" id="email" name='email' placeholder="Enter your email">
+  </div>
+
+<div class="row">
+                <div class="col-sm-12 form-group">
+                <label>How do you rate your overall experience?</label>
+                <p>
+                    <label class="radio-inline">
+                    <input type="radio" name="r1" id="r1" value="bad" >
+                    1
+                    </label>
+
+                    <label class="radio-inline">
+                    <input type="radio" name="r2" id="r2" value="average" >
+                    2
+                    </label>
+
+                    <label class="radio-inline">
+                    <input type="radio" name="r3" id="r3" value="good" >
+                    3
+                    </label>
+
+                    <label class="radio-inline">
+                    <input type="radio" name="r4" id="r4" value="good" >
+                    4
+                    </label>
+
+                    <label class="radio-inline">
+                    <input type="radio" name="r5" id="r5" value="good" >
+                    5
+                    </label>
+                </p>
+                </div>
+            </div>
+ <div class="form-group">
+    <label for="name">Suggest,if any improvement required </label>
+    <textarea name="message" id="message" class="form-control" placeholder="message" style="width: 100%; height: 150px;"></textarea>
+  </div>
+
+
+
+
+
+
+
+
+                </div>
+            </form>
+
+</div>
+
+
