@@ -1,0 +1,208 @@
+{% extends 'emp/base.html' %}
+
+{% block text %}
+
+{% endblock %}
+
+ {% block bann %}
+{% load static %}
+   <link rel="stylesheet" href="{% static "emp/css/style5.css" %}">
+    <div id="content-wrapper" class="d-flex flex-column">
+
+  <section class="colored-section" id="title">
+
+    <div class="container-fluid">
+
+      <!-- Nav Bar -->
+
+      <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <a class="navbar-brand" href="">Employer Recommendation System</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#footer">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#pricing">Feedback</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#cta"></a>
+            </li>
+          </ul>
+
+        </div>
+      </nav>
+
+
+      <div class="row">
+
+        <div class="col-lg-6">
+            {% if user.is_authenticated %}
+            <h1 class="big-heading" style="color: purple;">Welcome! <br> Sir {{request.user}}</h1><h3 style="color: red;" style="font-family:verdana">Get better employers from spoken Tutorial</h3> <br>
+            <p style="color: black;">You can dream, create, design and build the most wonderful place in the world…but it requires people to make the dream a reality.</p>
+
+{% endif %}
+
+        </div>
+
+       <div class="col-lg-6">
+          <img class="title-image" src="{% static 'emp/img/e3.jfif' %}" alt="iphone-mockup">
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+
+{% endblock %}
+
+
+{% block search1 %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+       <form method="get" action="" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <div class="input-group">
+              <input type="text" class="form-control bg-light border-0 small" name="search1" id="search1" placeholder="Search for students" aria-label="Search" aria-describedby="basic-addon2">
+                  <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                                search
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+
+
+            </div>
+
+          </form>
+
+
+
+
+{% endblock %}
+{% block content %}
+        {% if not name %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Welcome Sir! Create company profile before posting jobs </strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                        </button>
+                </div>
+
+        {% endif %}
+
+              {% if name %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Welcome Sir! Your each posting of Jobs will reduce unemployment </strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                        </button>
+                </div>
+
+        {% endif %}
+        <h1>Employer Section</h1><br>
+
+         <div class="row">
+        <div class="col s4">
+            <!-- Promo Content 1 goes here -->
+            <div class="center">
+                 <i class="icon fas fa-check-circle fa-4x"  style="color: blue"></i>
+
+                <p style="color: black;">You can</p>
+                <p class="light center" style="color: black;">built in functionality to view applied students profile</p>
+            </div>
+        </div>
+
+           <div class="col s4">
+            <!-- Promo Content 2 goes here -->
+            <div class="center">
+                <i class="icon fas fa-bullseye fa-4x" style="color: orange"></i>
+
+                <p style="color: black;">we recommend</p>
+                <p class="light center" style="color: black;">students based on your required skills</p>
+            </div>
+        </div>
+
+              <div class="col s4">
+            <!-- Promo Content 3 goes here -->
+            <div class="center">
+                 <i class="icon fas fa-heart fa-4x" style="color: red"></i>
+
+                <p style="color: black;">love to help</p>
+                <p class="light center" style="color: black;">you get deserving people in your company</p>
+
+            </div>
+        </div>
+        </div><br>
+        <br>
+
+        <h1 style="color: blue;">Your posted Jobs</h1>
+        <br>
+        <br>
+
+{% load static %}
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<div class="row">
+	<div class="col-md">
+		<div class="card card-body">
+			<table class="table table-sm">
+				<tr>
+					<th style="color: black;">Date</th>
+					<th style="color: black;">Job Title</th>
+				  <th style="color: black;">category</th>
+                    <th style="color: black;">criteria</th>
+                    <th style="color: black;">required Skills</th>
+
+				</tr>
+
+				{% for n in name %}
+
+				<tr>
+					<td style="color: black;">{{details.date_created}}</td>
+					<td style="color: black;">{{n.jobtitle}}</td>
+                    <td style="color: black;">{{n.jobcategory}}</td>
+                    <td style="color: black;">{{n.criteria}}</td>
+                    <td style="color: black;">{{n.jobskills}}</td>
+
+  <div class="apply-btn">
+       <td><a class="btn btn-sm btn-success" href='apply_job/{{n.id}}'>students applied</a></td>
+         <td><a class="btn btn-sm btn-info" href='updatejob/{{n.id}}'>Update</a></td>
+                    <td><a class="btn btn-sm btn-danger" href="deletejob/{{n.id}}">Delete</a></td>
+      </div>
+				</tr>
+
+
+
+
+
+				{% endfor %}
+
+			</table>
+		</div>
+	</div>
+</div>
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+

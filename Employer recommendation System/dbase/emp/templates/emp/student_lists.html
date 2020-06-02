@@ -1,0 +1,273 @@
+{% extends 'emp/base.html' %}
+
+{% block text %}
+
+{{jb.jobtitle}}
+
+{% endblock %}
+
+{% block bann %}
+
+{% load static %}
+   <link rel="stylesheet" href="{% static "emp/css/style5.css" %}">
+    <div id="content-wrapper" class="d-flex flex-column">
+
+  <section class="colored-section" id="title">
+
+    <div class="container-fluid">
+
+      <!-- Nav Bar -->
+
+      <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <a class="navbar-brand" href="">Employer Recommendation System</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#footer">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#pricing">Feedback</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#cta"></a>
+            </li>
+          </ul>
+
+        </div>
+      </nav>
+
+
+      <div class="row">
+
+        <div class="col-lg-6">
+            {% if user.is_authenticated %}
+            <h1 class="big-heading" style="color: purple;">Welcome! <br> Sir {{request.user}}</h1><h3 style="color: red;" style="font-family:verdana">Students applied to your Job</h3> <br>
+            <p style="color: black;">You can dream, create, design and build the most wonderful place in the world…but it requires people to make the dream a reality </p>
+
+{% endif %}
+
+        </div>
+
+       <div class="col-lg-6">
+          <img class="title-image" src="{% static 'emp/img/e3.jfif' %}" alt="iphone-mockup">
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+{% endblock %}
+{% block nav %}
+
+    <!-- Nav Item - Tables -->
+
+
+
+
+
+
+  <li class="nav-item">
+        <a class="nav-link" href="{% url 'employer' %}">
+      <i class="fas fa-user-tie"></i>
+          <span>Main Section</span></a>
+      </li>
+
+
+ <li class="nav-item">
+        <a class="nav-link" href="logout">
+          <i class="fas fa-user-graduate"></i>
+          <span>Log out</span></a>
+      </li>
+
+{% endblock %}
+{% block content %}
+<h2>Students applied</h2>
+{% load static %}
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<div class="row">
+	<div class="col-md">
+		<div class="card card-body">
+			<table class="table table-sm">
+				<tr>
+
+
+				  <th>Name</th>
+                    <th>Education</th>
+                    <th>skills</th>
+                    <th>test score</th>
+
+
+				</tr>
+            {% for i in lst %}
+
+
+
+
+
+
+
+                <tr>
+
+
+                    <td>
+                       <a href="my_report/{{i.id}}">{{i.name}}</a></td>
+
+                    <td>{{i.education}}</td>
+					<td>{{i.skills}}</td>
+					<td>{{i.Spokentest_score}}</td>
+
+
+
+              <div class="apply-btn">
+         <td><a class="btn btn-sm btn-info" href="accept/{{i.id}}/{{jb.id}}">Accept</a></td>
+                    <td><a class="btn btn-sm btn-danger" href="">Reject</a></td>
+      </div>
+
+
+				</tr>
+
+
+
+
+				{% endfor %}
+
+
+
+			</table>
+		</div>
+	</div>
+</div>
+{% if selected %}
+
+        <h2>Selected students</h2>
+<div class="row">
+	<div class="col-md">
+		<div class="card card-body">
+			<table class="table table-sm">
+				<tr>
+
+
+				  <th>Name</th>
+
+
+				</tr>
+            {% for i in selected %}
+
+
+
+
+
+
+
+                <tr>
+
+
+                    <td>
+
+
+
+					<td>{{i}}</td>
+
+
+
+
+
+
+
+				</tr>
+
+
+
+
+				{% endfor %}
+
+
+
+			</table>
+		</div>
+	</div>
+</div>
+
+{% endif %}
+
+
+<h2>Recommended students</h2>
+
+<div class="row">
+	<div class="col-md">
+		<div class="card card-body">
+			<table class="table table-sm">
+				<tr>
+
+
+				  <th>Name</th>
+
+                    <th>skills</th>
+                    <th>test score</th>
+                    <th>Status</th>
+
+				</tr>
+            {% for i in lst_recom %}
+
+
+
+
+
+
+
+                <tr>
+
+
+                    <td>
+                       <a href="my_report/{{i.id}}">{{i.name}}</a></td>
+
+
+					<td>{{i.skills}}</td>
+					<td>{{i.Spokentest_score}}</td>
+
+
+
+
+
+
+				</tr>
+
+
+
+
+				{% endfor %}
+
+
+
+			</table>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+

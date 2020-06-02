@@ -1,0 +1,108 @@
+{% extends 'emp/base.html' %}
+
+{% block text %}
+student section
+{% endblock %}
+
+
+{% block nav %}
+  <li class="nav-item">
+        <a class="nav-link" href="{% url 'apply' %}">
+          <i class="fas fa-user-graduate"></i>
+          <span>Main</span></a>
+      </li>
+  <li class="nav-item">
+        <a class="nav-link" href="{% url 'profile_page' %}">
+          <i class="fas fa-user-graduate"></i>
+          <span>My Profile</span></a>
+      </li>
+
+
+
+
+
+
+
+
+
+ <li class="nav-item">
+        <a class="nav-link" href="{% url 'logout' %}">
+          <i class="fas fa-user-graduate"></i>
+          <span>Log out</span></a>
+      </li>
+    <!-- Nav Item - Tables -->
+
+{% endblock %}
+
+
+{% block content %}
+{% load static %}
+ <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+
+
+<div class="resume">
+
+   <div class="resume_left">
+
+     <div class="resume_profile">
+       <img src="{{item.employer.e_pic.url}}" alt="profile_pic">
+     </div>
+     <div class="resume_content">
+       <div class="resume_item resume_info">
+         <p class="title">
+             <p class="bold"><h1>{{item.employer.company_name}}</h1>
+           {{item.joblocation}}
+         </p>
+
+         </div>
+
+  <div class="resume_right">
+    <div class="resume_item resume_about">
+
+        <p>{{item.employer.company_description}}</p>
+    </div>
+    <div class="resume_item resume_work">
+        <div class="title">
+           <p class="bold">Domain</p>
+         </div>
+        <ul>
+            <li>
+               <p>{{item.employer.emp_field}}</p>
+            </li>
+
+
+        </ul>
+    </div>
+         <div class="resume_item resume_work">
+        <div class="title">
+           <p class="bold">Students applied</p>
+         </div>
+        <ul>
+            <li>
+               <p>{{appli}}</p>
+
+            </li>
+
+
+        </ul>
+    </div>
+    <div class="resume_item resume_work">
+      <div class="title">
+           <p class="bold">Job Description</p>
+         </div>
+      <ul>
+             <li>
+               <p>{{item.jobdescription}}</p>
+            </li>
+        </ul>
+    </div>
+
+
+
+  </div>
+</div>
+
+</html>
+
+{% endblock %}
+

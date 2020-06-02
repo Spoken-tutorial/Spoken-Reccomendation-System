@@ -1,0 +1,276 @@
+
+{% extends 'emp/base_student.html' %}
+
+{% block text %}
+student section
+{% endblock %}
+
+
+{% block bann %}
+{% load static %}
+   <link rel="stylesheet" href="{% static "emp/css/style5.css" %}">
+    <div id="content-wrapper" class="d-flex flex-column">
+
+  <section class="colored-section" id="title">
+
+    <div class="container-fluid">
+
+      <!-- Nav Bar -->
+
+      <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <a class="navbar-brand" href="">Employer Recommendation System</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#footer">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#pricing">Feedback</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#cta"></a>
+            </li>
+          </ul>
+
+        </div>
+      </nav>
+
+
+      <div class="row">
+
+        <div class="col-lg-6">
+            {% if user.is_authenticated %}
+            <h1 class="big-heading">Welcome {{request.user}}!</h1><h3>Get better Job recommendation from spoken tutorial</h3> <br>
+            <p style="color: purple;">It's time to start living the life you have imagined</p>
+
+{% endif %}
+
+        </div>
+
+       <div class="col-lg-6">
+          <img class="title-image" src="{% static 'emp/img/st1.png' %}" alt="iphone-mockup">
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+{% endblock %}
+
+
+
+{% block search1 %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+       <form method="get" action="{% url 'search' %}" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <div class="input-group">
+              <input type="text" class="form-control bg-light border-0 small" name="search" id="search" placeholder="Search for jobs" aria-label="Search" aria-describedby="basic-addon2">
+                  <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                                search
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+
+
+            </div>
+
+          </form>
+
+
+
+
+{% endblock %}
+
+
+{% block content %}
+
+{% load static %}
+        {% if not data %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+  <strong>Welcome to student section!</strong> Create your profile in profile settings than apply for the jobs
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">×</span>
+  </button>
+</div>
+{% endif %}
+        {% if data %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Visit jobs recommended section for applying in new jobs </strong>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">×</span>
+  </button>
+</div>
+        {% endif %}
+<h1 style="color:red;">Latest job updates</h1><br>
+<div class="row">
+	<div class="col-md">
+		<div class="card card-body">
+			<table class="table table-sm">
+				<tr>
+					<th style="color:black;">Companies</th>
+					<th style="color:black;">Job Title</th>
+				  <th style="color:black;">category</th>
+
+                    <th style="color:black;">required Skills</th>
+
+				</tr>
+
+            {% for n in head1 %}
+
+				<tr>
+					<td><a href="company/{{n.id}}"> {{n.employer.company_name}}</a></td>
+					<td style="color:black;">{{n.jobtitle}}</td>
+                    <td style="color:black;">{{n.jobcategory}}</td>
+
+                    <td style="color:black;">{{n.jobskills}}</td>
+
+
+				</tr>
+
+{% endfor %}
+
+
+
+
+
+			</table>
+		</div>
+	</div>
+</div><br>
+<br>
+        <br>
+        <br>
+
+
+
+
+
+
+         <div class="row">
+        <div class="col s4">
+            <!-- Promo Content 1 goes here -->
+            <div class="center">
+                 <i class="icon fas fa-check-circle fa-4x "  style="color: blue"></i>
+
+                <p style="color:black;">Create your profile</p>
+                <p class="light center" style="color:black;">Get your Resume and profile report.</p>
+            </div>
+        </div>
+
+           <div class="col s4">
+            <!-- Promo Content 2 goes here -->
+            <div class="center">
+                <i class="icon fas fa-bullseye fa-4x" style="color: orange"></i>
+
+                <p style="color:black;"
+                >Filter your searches</p>
+                <p class="light center" style="color:black;">We built in functionality to filter jobs based on your skills</p>
+            </div>
+        </div>
+
+              <div class="col s4">
+            <!-- Promo Content 3 goes here -->
+            <div class="center">
+                 <i class="icon fas fa-heart fa-4x" style="color: red"></i>
+
+                <p style="color:black;">get jobs which you deserve</p>
+                 <p class="light center" style="color:black;">Built in functionality to recommend better jobs.</p>
+
+            </div>
+        </div>
+        </div>
+        <br>
+        <br>
+
+
+ {% if data %}
+        <h1 style="color:blue;">Applied Jobs</h1><br>
+<div class="row">
+	<div class="col-md">
+		<div class="card card-body">
+			<table class="table table-sm">
+				<tr>
+					<th style="color:black;">Date</th>
+					<th style="color:black;">Job Profile</th>
+					<th style="color:black;">Company name</th>
+                    <th style="color:black;">category</th>
+					<th style="color:black;">Status</th>
+
+				</tr>
+
+				{% for n in data %}
+
+				<tr>
+					<td style="color:black;">{{date}}</td>
+					<td style="color:black;">{{n.jobtitle}}</td>
+					<td style="color:black;">{{n.employer.company_name}}</td>
+					<td style="color:black;">{{n.jobcategory}}</td>
+                    <td style="color:black;">{{n.status}}</td>
+
+
+				</tr>
+				{% endfor %}
+
+			</table>
+
+            <a href="{% url 'more_jobs' %}">more</a>
+
+		</div>
+	</div>
+</div>
+
+
+{% endif %}
+{% load static %}
+<br>
+        <div class="row">
+<div class="card" style="width:250px">
+  <img class="card-img-top" src="{% static 'emp/img/pro1.png' %}" alt="Card image">
+  <div class="card-body">
+    <h4 class="card-title">John Doe</h4>
+    <p class="card-text">Some example text.</p>
+    <a href="#" class="btn btn-primary">See Profile</a>
+  </div>
+</div>
+            <br>
+<div class="card" style="width:250px">
+  <img class="card-img-top" src="{% static 'emp/img/pro1.png' %}" alt="Card image">
+  <div class="card-body">
+    <h4 class="card-title">John Doe</h4>
+    <p class="card-text">Some example text.</p>
+    <a href="#" class="btn btn-primary">See Profile</a>
+  </div>
+</div>
+            </div>
+
+
+
+{% endblock %}
+{% block pdf %}
+ <a href='pdf' class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+{% endblock %}
+{% block name %}
+
+{% if user.is_authenticated %}
+    <span class="mr-2 d-none d-lg-inline text-gray-600 small">Logged in as {{request.user}}</span>
+{% endif %}
+{% endblock %}
+
+{% block img %}
+{% if user.is_authenticated %}
+ <img class="img-profile rounded-circle" src="{{request.user.student.pic.url}}">
+{% endif %}
+{% endblock %}
+
+
+<!-- Sign upModal -->

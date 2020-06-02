@@ -1,0 +1,46 @@
+{% extends 'emp/base1.html' %}
+{% block text %}
+
+
+{% endblock %}
+
+
+
+
+{% block content %}
+
+{% load static %}
+
+
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+        <div class="row">
+             {% for post in allPosts %}
+<div class="card" style="width:655px">
+
+  <div class="card-body">
+    <h4 class="card-title">{{n.jobtitle}}</h4>
+
+    <p class="card-text">
+         <strong class="d-inline-block mb-2 text-primary">Article by {{post.author}}</strong>
+          <h3 class="mb-0"><a class="text-dark" href="/blog/{{post.slug}}">{{post.title}}</a></h3>
+          <div class="mb-1 text-muted">{{post.datetime}}</div>
+          <p>{{post.content|safe| truncatechars:200 }}</p>
+      </p>
+
+  </p>
+
+              <div class="apply-btn">
+          <a href="/blog/{{post.slug}}" role="button" class="btn btn-primary">Continue reading</a>
+
+
+
+
+
+</div>
+  </div>
+</div>
+{% endfor %}
+
+{% endblock %}

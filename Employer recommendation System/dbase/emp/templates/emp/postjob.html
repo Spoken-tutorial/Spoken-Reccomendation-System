@@ -1,0 +1,131 @@
+{% extends 'emp/base.html' %}
+
+{% block text %}
+Employer section
+{% endblock %}
+
+
+{% block bann %}
+
+{% load static %}
+   <link rel="stylesheet" href="{% static "emp/css/style5.css" %}">
+    <div id="content-wrapper" class="d-flex flex-column">
+
+  <section class="colored-section" id="title">
+
+    <div class="container-fluid">
+
+      <!-- Nav Bar -->
+
+      <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <a class="navbar-brand" href="">Employer Recommendation System</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#footer">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#pricing">Feedback</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#cta"></a>
+            </li>
+          </ul>
+
+        </div>
+      </nav>
+
+
+      <div class="row">
+
+        <div class="col-lg-6">
+            {% if user.is_authenticated %}
+            <h1 class="big-heading">Welcome {{request.user}}!</h1><h3>Post your Jobs</h3> <br>
+            <p style="color: purple;">This platform will help you to connect with deserving students</p>
+
+{% endif %}
+
+        </div>
+
+       <div class="col-lg-6">
+          <img class="title-image" src="{% static 'emp/img/j1.jfif' %}" alt="iphone-mockup">
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+{% endblock %}
+
+{% block content %}
+
+
+
+
+
+
+
+
+
+
+<div class="container my-3">
+
+    <form action="" method="post">{% csrf_token %}
+  <div class="form-group">
+
+         <div class="form-group">
+    <label for="location">Job Location</label>
+    <input type="text" class="form-control" id="location" name='location' placeholder="Enter the location">
+  </div>
+
+ <div class="form-group">
+    <label for="title">Job Title</label>
+    <input type="text" class="form-control" id="title1" name='title' placeholder="Enter the job title">
+  </div>
+
+  <div class="form-group">
+    <label for="skills">skills you required</label>
+    <input type="text" class="form-control" id="skills" name='skills' placeholder="Enter the skills you required">
+  </div>
+
+ <div class="form-group">
+    <label for="ask">Job description</label>
+       <textarea name='share' class="form-control" id="ask" class="form-control" placeholder="job description" style="width: 100%; height: 150px;"></textarea>
+
+  </div>
+
+
+ <div class="form-group">
+    <label for="ask1">Job category</label>
+    <input type="text" class="form-control" id="ask1" name='cate' placeholder=" job category">
+  </div>
+
+       <div class="form-group">
+    <label for="ask2">Job criteria</label>
+    <input type="text" class="form-control" id="ask2" name='criteria' placeholder=" job criteria">
+  </div>
+
+
+
+        <button type="submit" class="btn btn-danger">post</button>
+
+
+    </form>
+
+
+
+	</div>
+</div>
+
+
+{% endblock %}

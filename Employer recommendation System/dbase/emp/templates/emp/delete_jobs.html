@@ -1,0 +1,72 @@
+{% extends 'emp/base.html' %}
+
+{% block text %}
+Employer section
+{% endblock %}
+
+
+{% block nav %}
+
+    <!-- Nav Item - Tables -->
+      <li class="nav-item">
+        <a class="nav-link" href="employer_profile">
+      <i class="fas fa-user-tie"></i>
+          <span>Employer Profile</span></a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="employer">
+      <i class="fas fa-user-tie"></i>
+          <span>company info</span></a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="post_jobs">
+      <i class="fas fa-user-tie"></i>
+          <span>Post jobs</span></a>
+      </li>
+
+
+ <li class="nav-item">
+        <a class="nav-link" href="logout">
+          <i class="fas fa-user-graduate"></i>
+          <span>Log out</span></a>
+      </li>
+
+{% endblock %}
+{% block content %}
+
+
+<div class="row">
+	<div class="col-md">
+		<div class="card card-body">
+			<table class="table table-sm">
+				<tr>
+					<th>Job Title</th>
+					<th>Job Location</th>
+					<th>Job skills</th>
+					<th>job category</th>
+                    <th>job criteria</th>
+				</tr>
+
+				{% for n in name %}
+
+				<tr>
+					<td>{{n.jobtitle}}</td>
+					<td>{{n.joblocation}}</td>
+					<td>{{n.jobskills}}</td>
+					<td>{{n.jobcategory}}</td>
+                    <td>{{n.criteria}}</td>
+                    <td><a class="btn btn-sm btn-info" href='updatejob/{{n.id}}'>Update</a></td>
+                    <td><a class="btn btn-sm btn-danger" href="deletejob/{{n.id}}">Delete</a></td>
+
+				</tr>
+				{% endfor %}
+
+			</table>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}
