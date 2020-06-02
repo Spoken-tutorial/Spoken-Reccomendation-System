@@ -1,0 +1,107 @@
+{% extends 'emp/base1.html' %}
+{% block text %}
+  Jobs based on title
+{% endblock %}
+
+
+
+
+{% block search1 %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+       <form method="get" action="search1" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <div class="input-group">
+              <input type="text" class="form-control bg-light border-0 small" name="search1" id="search1" placeholder="jobs based on skills" aria-label="Search" aria-describedby="basic-addon2">
+                  <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                                search
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+
+
+            </div>
+
+          </form>
+ <form method="get" action="search2" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <div class="input-group">
+              <input type="text" class="form-control bg-light border-0 small" name="search2" id="search2" placeholder="jobs based on title" aria-label="Search" aria-describedby="basic-addon2">
+                  <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                                search
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+
+
+            </div>
+
+          </form>
+ <form method="get" action="search3" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <div class="input-group">
+              <input type="text" class="form-control bg-light border-0 small" name="search3" id="search3" placeholder="Recruiters" aria-label="Search" aria-describedby="basic-addon2">
+                  <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                                search
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+
+
+            </div>
+
+          </form>
+
+
+
+{% endblock %}
+
+
+{% block content %}
+{% load static %}
+
+
+
+
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <div class="row">
+            {% for n in head %}
+<div class="card" style="width:400px">
+
+  <div class="card-body">
+    <h4 class="card-title">{{n.jobtitle}}</h4>
+    <p class="card-text">
+         <i class="fa fa-map-marker"></i><span>{{n.joblocation}}</span><br>
+      <i class="fa fa-briefcase"></i><span> 0-1 yrs </span><br>
+       <i class="fa fa-inr"></i><span> 3-4 Lacs p.a.</span><br>
+        <p>Company Name<i class="fa fa-angle-double-right"></i>
+             {{n.employer.company_name}}
+        </p>
+
+        <p>Skills <i class="fa fa-angle-double-right"></i>{{n.jobskills}}</p>
+      <p>criteria <i class="fa fa-angle-double-right"></i>{{n.criteria}}</p>
+		<p>category<i class="fa fa-angle-double-right"></i>{{n.jobcategory}}</p>
+
+    </p>
+              <div class="apply-btn">
+
+<a class="btn btn-sm btn-success" href="{% url 'login' %}">Login to Apply</a>
+
+
+</div>
+  </div>
+</div>
+
+{% endfor %}
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

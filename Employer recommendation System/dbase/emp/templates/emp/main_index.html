@@ -1,0 +1,545 @@
+{% extends 'emp/base1.html' %}
+{% block text %}
+
+
+{% endblock %}
+
+
+{% block search1 %}
+{% load static %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+       <form method="get" action="search1" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <div class="input-group">
+              <input type="text" class="form-control bg-light border-0 small" name="search1" id="search1" placeholder="jobs based on skills" aria-label="Search" aria-describedby="basic-addon2">
+                  <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                                search
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+
+
+            </div>
+
+          </form>
+ <form method="get" action="search2" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <div class="input-group">
+              <input type="text" class="form-control bg-light border-0 small" name="search2" id="search2" placeholder="jobs based on title" aria-label="Search" aria-describedby="basic-addon2">
+                  <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                                search
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+
+
+            </div>
+
+          </form>
+
+ <form method="get" action="search3" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <div class="input-group">
+              <input type="text"  class="form-control bg-light border-0 small" name="search3" id="search3" placeholder="Recruiters" aria-label="Search" aria-describedby="basic-addon2">
+                  <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                                search
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+
+
+            </div>
+
+          </form>
+
+
+{% endblock %}
+
+
+
+
+{% block content %}
+
+<!-- Sign upModal -->
+<div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="signupModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="title1">Feedback form</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form action="feedback" method="post">{% csrf_token %}
+  <div class="form-group">
+
+         <div class="form-group">
+    <label for="name1">Name</label>
+    <input type="text" class="form-control" id="name1" name='name1' placeholder="Enter your name">
+        </div>
+
+ <div class="form-group">
+    <label for="email1">Email</label>
+    <input type="text" class="form-control" id="email1" name='email1' placeholder="Enter your email">
+  </div>
+
+ <div class="form-group">
+    <label for="name">rating</label><br>
+     <label>1-bad</label>     <label>2-average</label>    <label>3-good</label>      <label>4-very good</label>     <label>5-excellent</label>
+    <input type="text" class="form-control" id="ur" name='ur' placeholder="Enter no from 1 to 5">
+  </div>
+ <div class="form-group">
+    <label for="name">Suggest,if any improvement required </label>
+    <textarea name='message' id="message" class="form-control" placeholder="message" style="width: 100%; height: 150px;"></textarea>
+  </div>
+
+
+
+</div>
+
+
+
+
+      <div class="modal-footer">
+<input type="submit" name="btnSubmit" class="btnContact" value="Send Message" />
+
+      </div>
+
+
+            </form>
+
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+  <strong>Welcome to Employer and Student Recommendation System!</strong> we recommend you the best jobs you deserve and help employer to find deserving students
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">×</span>
+  </button>
+</div>
+
+
+
+<div>
+<h1>About</h1>
+<p style="color:black;">Spoken Tutorial is a multi-award winning educational content portal.
+    Here one can learn various Free and Open Source Software all by oneself.
+    Our self-paced, multi-lingual courses ensure that anybody with a computer and a desire for learning, can learn from any place, at any time and in a language of their choice.
+    All the content published on this website are shared under the CC BY SA license.<br>
+
+Our courses are simple and easy to follow even for a beginner but they also meet the growing needs of the learner.  Our engaging digital content ensures that learning happens at all levels - Basic, Intermediate and Advanced.  Our content mandates side-by-side practice thereby ensuring that learners are actively learning.
+    Many of the software taught, are used in various disciplines of Engineering, pure Sciences and several other Under-Grad and Post-Grad studies, and can be extended to Commerce, Arts and Management streams as well.
+    These can also be used by Teachers to prepare lesson plans, explain abstract concepts and give digital assignments to students.</p>
+                </div><br>
+
+
+
+
+<h1 style="color:red;">List of Companies and Job titles</h1>
+<div class="row">
+	<div class="col-md">
+		<div class="card card-body">
+			<table class="table table-sm">
+				<tr>
+					<th style="color:black;">Companies</th>
+					<th style="color:black;">Job Title</th>
+				  <th style="color:black;">category</th>
+
+                    <th style="color:black;">required Skills</th>
+
+				</tr>
+
+            {% for n in head2 %}
+
+				<tr>
+					<td style="color:black;">{{n.employer.company_name}}</td>
+					<td style="color:black;">{{n.jobtitle}}</td>
+                    <td style="color:black;">{{n.jobcategory}}</td>
+
+                    <td style="color:black;">{{n.jobskills}}</td>
+
+
+				</tr>
+
+{% endfor %}
+
+
+
+
+
+			</table>
+		</div>
+	</div>
+</div><br>
+
+  {% load static %}
+<link rel="stylesheet" href="{% static "emp/css/style5.css" %}">
+
+
+  <section class="white-section" id="features">
+
+    <div class="container-fluid">
+
+      <div class="row">
+        <div class="feature-box col-lg-4">
+          <i class="icon fas fa-search fa-4x"></i>
+          <h3 class="feature-title" style="color:blue;">Filter Your searches</h3>
+          <p style="color:black;">We built in functionality to filter based on skills and jobtitle</p>
+        </div>
+
+        <div class="feature-box col-lg-4">
+          <i class="icon fas fa-bullseye fa-4x"></i>
+          <h3 class="feature-title" style="color:orange;">Recommendation</h3>
+          <p style="color:black;">Functionality to recommend jobs on basis of skills<br>and recommend deserving students to employer</p>
+        </div>
+
+        <div class="feature-box col-lg-4">
+          <i class="icon fas fa-users fa-4x"></i>
+          <h3 class="feature-title" style="color:green;">Create your Profile</h3>
+          <p style="color:black;">students and company can create their profile</p>
+        </div>
+      </div>
+
+
+    </div>
+  </section>
+<section id="recruiters">
+  <div class="container text-center">
+    <h3 style="color:red;">TOP RECRUITERS</h3>
+  <div>
+<img src="{% static 'emp/img/l2.png' %}" height="100">
+<img src="{% static 'emp/img/l4.png' %}" height="100">
+  <img src="{% static 'emp/img/l5.png' %}" height="100">
+
+  <img src="">
+<img src="">
+  </div>
+  </div>
+</section>
+
+<section id="jobs">
+  <div class="container">
+    <h5 style="color:red;">Recent Updates</h5>
+
+{% for n in head1 %}
+   <div class="company-details">
+    <div class="job-update">
+<h4 style="color:black;"><b>{{n.jobtitle}}</b></h4>
+
+     <i class="fa fa-map-marker"></i><span>{{n.joblocation}}</span><br>
+      <i class="fa fa-briefcase"></i><span> 0-1 yrs </span><br>
+       <i class="fa fa-inr"></i><span> 3-4 Lacs p.a.</span><br>
+        <p>Company Name<i class="fa fa-angle-double-right"></i>
+         {{n.employer.company_name}}
+        </p>
+
+
+        <p>Skills <i class="fa fa-angle-double-right"></i>{{n.jobskills}}</p>
+      <p>criteria <i class="fa fa-angle-double-right"></i>{{n.criteria}}</p>
+		<p>descp<i class="fa fa-angle-double-right"></i>{{n.jobcategory}}</p>
+
+
+
+
+    </div>
+      <div class="apply-btn">
+        <a href="{% url 'login' %}" class="btn btn-danger" role="button">Login to Apply</a>
+      </div>
+  </div>
+      {% endfor %}
+
+
+
+
+
+
+
+<br><section id="site-stats">
+  <div class="container text-center">
+    <h3>Site statistics</h3>
+    <div class="row">
+    <div class="col-md-6">
+          <div class="row">
+            <div class="col-6">
+              <div class="stats-box">
+                  <i class="fa fa-user-o"></i><span><small>{{j1}}</small></span>
+                <p style="color:black;">Job seekers</p>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <div class="stats-box">
+                  <i class="fa fa-slideshare"></i><span><small>{{emplo1}}+</small></span>
+                <p style="color:black;">Employers</p>
+              </div>
+            </div>
+
+
+
+          </div>
+
+
+    </div>
+
+       <div class="col-md-6">
+          <div class="row">
+            <div class="col-6">
+              <div class="stats-box">
+                  <i class="fa fa-hand-peace-o"></i><span><small>{{jo}}+</small></span>
+                <p style="color:black;">Active jobs</p>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <div class="stats-box">
+                  <i class="fa fa-building-o"></i><span><small>400 +</small></span>
+                <p style="color:black;">Companies</p>
+              </div>
+            </div>
+
+
+
+          </div>
+
+
+    </div>
+
+
+  </div>
+</div>
+
+
+<div class="company-details">
+    <div class="job-update">
+         <link rel="stylesheet" href="{% static "emp/css/style9.css" %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<span class="heading" style="color:black;">User Rating</span>
+<span class="fa fa-star checked"></span>
+<span class="fa fa-star checked"></span>
+<span class="fa fa-star checked"></span>
+<span class="fa fa-star checked"></span>
+<span class="fa fa-star"></span>
+<p>4.1 average based on {{lt}} reviews</p>
+<hr style="border:3px solid #f1f1f1">
+<div class="body1">
+<div class="row">
+  <div class="side">
+    <div>5 star</div>
+  </div>
+  <div class="middle">
+    <div class="bar-container">
+      <div class="bar-5"></div>
+    </div>
+  </div>
+  <div class="side right">
+    <div>{{sr5}}</div>
+  </div>
+  <div class="side">
+    <div>4 star</div>
+  </div>
+  <div class="middle">
+    <div class="bar-container">
+      <div class="bar-4"></div>
+    </div>
+  </div>
+  <div class="side right">
+    <div>{{sr4}}</div>
+  </div>
+  <div class="side">
+    <div>3 star</div>
+  </div>
+  <div class="middle">
+    <div class="bar-container">
+      <div class="bar-3"></div>
+    </div>
+  </div>
+  <div class="side right">
+    <div>{{sr3}}</div>
+  </div>
+  <div class="side">
+    <div>2 star</div>
+  </div>
+  <div class="middle">
+    <div class="bar-container">
+      <div class="bar-2"></div>
+    </div>
+  </div>
+  <div class="side right">
+    <div>{{sr2}}</div>
+  </div>
+  <div class="side">
+    <div>1 star</div>
+  </div>
+  <div class="middle">
+    <div class="bar-container">
+      <div class="bar-1"></div>
+    </div>
+  </div>
+  <div class="side right">
+    <div>{{sr1}}</div>
+  </div>
+</div>
+</div>
+
+
+  </div>
+</div>
+<script>
+
+    document.getElementsByClassName("bar-1")[0].style.width ={{s1}};
+    document.getElementsByClassName("bar-2")[0].style.width ={{s2}};
+    document.getElementsByClassName("bar-3")[0].style.width ={{s3}};
+    document.getElementsByClassName("bar-4")[0].style.width ={{s4}};
+    document.getElementsByClassName("bar-5")[0].style.width ={{s5}};
+
+</script>
+
+</section>
+
+
+
+
+  {% endblock %}
+
+  {% block bann %}
+{% load static %}
+   <link rel="stylesheet" href="{% static "emp/css/style5.css" %}">
+    <div id="content-wrapper" class="d-flex flex-column">
+
+  <section class="colored-section" id="title">
+
+    <div class="container-fluid">
+
+      <!-- Nav Bar -->
+
+      <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <a class="navbar-brand" href="">Employer Recommendation System</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#footer">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#pricing">Feedback</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#cta"></a>
+            </li>
+          </ul>
+
+        </div>
+      </nav>
+
+
+      <div class="row">
+
+        <div class="col-lg-6">
+          <h1 class="big-heading">Hiring is Simpler, Smarter, Faster with Spoken Tutorial</h1>
+
+                      <a href="signup_student" class="btn btn-warning" role="button">I'm a student</a>
+                    <a href="signup_employer" class="btn btn-danger" role="button">I'm an employer</a>
+        </div>
+
+       <div class="col-lg-6">
+          <img class="title-image" src="{% static 'emp/img/e1.jfif' %}" alt="iphone-mockup">
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+  </section>
+
+
+
+{% endblock %}
+
+{% block footer %}
+{% load static %}
+   <link rel="stylesheet" href="{% static "emp/css/style5.css" %}">
+<div class="container">
+    <div class="page-header pt-2">
+        <h1></h1>
+
+
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5">
+                <h5><i class="fa fa-road"></i>Spoken Tutorial</h5>
+                <div class="row">
+                    <div class="col-6">
+                        <ul class="list-unstyled">
+                            <li><a href="">Product</a></li>
+                            <li><a href="">Benefits</a></li>
+                            <li><a href="">Partners</a></li>
+                            <li><a href="">Team</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-6">
+                        <ul class="list-unstyled">
+                            <li><a href="">Documentation</a></li>
+                            <li><a href="">Support</a></li>
+                            <li><a href="">Legal Terms</a></li>
+                            <li><a href="">About</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <ul class="nav">
+                    <li class="nav-item"><a href="" class="nav-link pl-0"><i class="social-icon fab fa-facebook-f"></i></a></li>
+                    <li class="nav-item"><a href="" class="nav-link"><i class="social-icon fab fa-twitter"></i></a></li>
+                    <li class="nav-item"><a href="" class="nav-link"> <i class="social-icon fab fa-instagram"></i></a></li>
+                    <li class="nav-item"><a href="" class="nav-link"> <i class="social-icon fab fa-youtube"></i></a></li>
+                </ul>
+                <br>
+            </div>
+            <div class="col-md-2">
+                <h5 class="text-md-right">Contact Us</h5>
+
+                <hr>
+            </div>
+            <div class="col-md-5">
+                <form method="post" action="">
+                    {% csrf_token %}
+                    <fieldset class="form-group">
+                        <input type="email" class="form-control" id="email_user" name="email_user" placeholder="Enter email">
+                    </fieldset>
+                    <fieldset class="form-group">
+                        <textarea class="form-control" id="comment_user" name="comment_user" placeholder="Message"></textarea>
+                    </fieldset>
+                    <fieldset class="form-group text-xs-right">
+                        <button type="submit" class="btn btn-info">Send</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+  <footer class="white-section" id="footer">
+    <div class="container-fluid">
+
+      <p>© Copyright</p>
+    </div>
+  </footer>
+
+{% endblock %}
+

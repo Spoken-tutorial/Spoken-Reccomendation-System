@@ -1,0 +1,77 @@
+{% extends 'emp/base.html' %}
+
+{% block text %}
+Employer section
+{% endblock %}
+
+
+{% block content %}
+{% load static %}
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<div class="row">
+	<div class="col-md">
+		<div class="card card-body">
+			<table class="table table-sm">
+				<tr>
+
+					<th>Applications</th>
+				  <th>Name</th>
+                    <th>Education</th>
+                    <th>skills</th>
+                    <th>test score</th>
+                    <th>Status</th>
+
+				</tr>
+            {% for i in student_list %}
+
+
+
+                    {% for j in i %}
+
+
+
+                <tr>
+
+                    <td>{{j.jobtitle}}</td>
+                    <td>{{j.name}}</td>
+
+                    <td>{{j.education}}</td>
+					<td>{{j.skills}}</td>
+					<td>{{j.Spokentest_score}}</td>
+                       <td>{{j.status}}</td>
+
+
+
+
+
+
+				</tr>
+				{% endfor %}
+                  {% endfor %}
+
+
+			</table>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+

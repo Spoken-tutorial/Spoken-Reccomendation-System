@@ -1,0 +1,91 @@
+{% extends 'emp/base_student.html' %}
+
+{% block text %}
+Jobs available
+{% endblock %}
+
+
+
+
+{% block search1 %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+       <form method="get" action="search" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <div class="input-group">
+              <input type="text" class="form-control bg-light border-0 small" name="search" id="search" placeholder="Search for jobs" aria-label="Search" aria-describedby="basic-addon2">
+                  <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                                search
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+
+
+            </div>
+
+          </form>
+
+
+
+
+{% endblock %}
+
+
+{% block content %}
+{% load static %}
+
+
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+        <div class="row">
+            {% for n in head %}
+<div class="card" style="width:400px">
+
+  <div class="card-body">
+    <h4 class="card-title">{{n.jobtitle}}</h4>
+    <p class="card-text">
+         <i class="fa fa-map-marker"></i><span>{{n.joblocation}}</span><br>
+      <i class="fa fa-briefcase"></i><span> 0-1 yrs </span><br>
+       <i class="fa fa-inr"></i><span> 3-4 Lacs p.a.</span><br>
+        <p>Company Name<i class="fa fa-angle-double-right"></i>
+            <a href="company/{{n.id}}"> {{n.employer.company_name}}</a>
+        </p>
+
+        <p>Skills <i class="fa fa-angle-double-right"></i>{{n.jobskills}}</p>
+      <p>criteria <i class="fa fa-angle-double-right"></i>{{n.criteria}}</p>
+		<p>category<i class="fa fa-angle-double-right"></i>{{n.jobcategory}}</p>
+
+    </p>
+              <div class="apply-btn">
+         <a class="btn btn-sm btn-danger"  href='jobsapplied/{{n.id}}'>Apply</a>
+
+
+
+</div>
+  </div>
+</div>
+{% endfor %}
+
+
+
+
+
+
+
+{% endblock %}
+{% block pdf %}
+ <a href="pdf" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+{% endblock %}
+{% block name %}
+
+{% if user.is_authenticated %}
+    <span class="mr-2 d-none d-lg-inline text-gray-600 small">Logged in as {{request.user}}</span>
+{% endif %}
+{% endblock %}
+
+{% block img %}
+{% if user.is_authenticated %}
+ <img class="img-profile rounded-circle" src="{{request.user.student.pic.url}}">
+{% endif %}
+{% endblock %}

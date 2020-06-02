@@ -1,0 +1,169 @@
+{% extends 'emp/base_student.html' %}
+
+{% block text %}
+
+
+{% endblock %}
+
+{% block bann %}
+
+
+
+{% load static %}
+   <link rel="stylesheet" href="{% static "emp/css/style5.css" %}">
+    <div id="content-wrapper" class="d-flex flex-column">
+
+  <section class="colored-section" id="title">
+
+    <div class="container-fluid">
+
+      <!-- Nav Bar -->
+
+      <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <a class="navbar-brand" href="">Employer Recommendation System</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#footer">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#pricing">Feedback</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#cta"></a>
+            </li>
+          </ul>
+
+        </div>
+      </nav>
+
+
+      <div class="row">
+
+        <div class="col-lg-6">
+            {% if user.is_authenticated %}
+            <h1 class="big-heading">Welcome! <br>Build your profile</h1><h3></h3> <br>
+			<p> Your profile is your first point of contact with the employer and sets the tone for subsequent interviewing steps.</p>
+{% endif %}
+
+        </div>
+
+       <div class="col-lg-6">
+          <img class="title-image" src="{% static 'emp/img/jobby.jpg' %}" alt="iphone-mockup">
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+{% endblock %}
+
+{% block name %}
+
+
+{% endblock %}
+{% block content %}
+        <h1>Student Profile</h1>
+{% for message in messages %}
+   <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+            <strong>{{message}} </strong>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">×</span>
+  </button>
+</div>
+{% endfor %}
+        {% load static %}
+<style>
+	.profile-pic{
+		max-width: 200px;
+		max-height:200px;
+		margin: 0 auto;
+		border-radius: 50%;
+	}
+</style>
+
+
+              {% if k %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong> your profile has been created! You can change if you want  </strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                        </button>
+                </div>
+
+        {% endif %}
+
+
+<br>
+
+
+<div class="row">
+	<div class="col-md-4">
+		<div class="card card-body">
+			<a class="btn btn-warning" href='students'> &#8592; Back </a>
+			<hr>
+			<h3 style="text-align: center">Account Settings</h3>
+			<hr>
+			<img class="profile-pic" src="{{request.user.student.pic.url}}" >
+
+		</div>
+
+    </div>
+
+		<div class="d-flex justify-content-center h-100">
+			<div class="user_card">
+				<div class="d-flex justify-content-center">
+
+				</div>
+				<div class="d-flex justify-content-center form_container">
+
+					 <form method="POST" action="" enctype="multipart/form-data">
+				{% csrf_token %}
+				{{ form.as_p }}
+
+			<input class="btn btn-primary" type="submit" name="Update Information">
+			</form>
+				</div>
+
+
+
+
+			</div>
+		</div>
+	</div>
+	<script>
+
+
+		//Query All input fields
+		var form_fields = document.getElementsByTagName('input')
+		form_fields[1].placeholder='Username..';
+		form_fields[2].placeholder='Email..';
+		form_fields[3].placeholder='Enter password...';
+		form_fields[4].placeholder='Re-enter Password...';
+
+
+		for (var field in form_fields){
+			form_fields[field].className += ' form-control'
+		}
+	</script>
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

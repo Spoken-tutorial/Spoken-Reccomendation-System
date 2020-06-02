@@ -1,0 +1,108 @@
+{% extends 'emp/base1.html' %}
+{% block text %}
+  Recruiters
+{% endblock %}
+
+{% block nav %}
+
+
+ <li class="nav-item">
+        <a class="nav-link" href="{% url 'index' %}">
+          <i class="fas fa-user-graduate"></i>
+          <span>Main Page</span></a>
+      </li>
+    <!-- Nav Item - Tables -->
+
+
+{% endblock %}
+{% block search1 %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+       <form method="get" action="search1" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <div class="input-group">
+              <input type="text" class="form-control bg-light border-0 small" name="search1" id="search1" placeholder="jobs based on skills" aria-label="Search" aria-describedby="basic-addon2">
+                  <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                                search
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+
+
+            </div>
+
+          </form>
+ <form method="get" action="search2" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <div class="input-group">
+              <input type="text" class="form-control bg-light border-0 small" name="search2" id="search2" placeholder="jobs based on title" aria-label="Search" aria-describedby="basic-addon2">
+                  <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                                search
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+
+
+            </div>
+
+          </form>
+ <form method="get" action="search3" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <div class="input-group">
+              <input type="text" class="form-control bg-light border-0 small" name="search3" id="search3" placeholder="Recruiters" aria-label="Search" aria-describedby="basic-addon2">
+                  <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                                search
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+
+
+            </div>
+
+          </form>
+
+
+
+{% endblock %}
+
+
+{% block content %}
+{% load static %}
+
+
+        <div class="row">
+            {% for n in head %}
+<div class="card" style="width:300px">
+ <img class="card-img-top" src="{{n.e_pic.url}}" alt="Card image">
+  <div class="card-body">
+    <h4 class="card-title">{{n.jobtitle}}</h4>
+    <p class="card-text">
+
+        <p>Company Name<i class="fa fa-angle-double-right"></i>
+             {{n.company_name}}
+        </p>
+      <p>category<i class="fa fa-angle-double-right"></i>{{n.jobcategory}}</p>
+
+
+
+    </p>
+
+  </div>
+</div>
+
+{% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
