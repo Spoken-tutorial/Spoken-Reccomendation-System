@@ -1,3 +1,4 @@
+<!--- Jobs displaying section for students--->
 {% extends 'emp/base_student.html' %}
 
 {% block text %}
@@ -93,7 +94,8 @@ Jobs Recommended
 		<p>category<i class="fa fa-angle-double-right"></i>{{n.jobcategory}}</p>
 
     </p>
-              <div class="btn-apply"  id = "{{n.id}}">
+              <div data-job="{{n.id}}" class="btn-apply"  id = "{{n.id}}">
+
 
 
 <!--<script type="text/javascript">
@@ -105,8 +107,6 @@ Jobs Recommended
 			}
 		</script>-->
    <a class="btn btn-sm btn-danger hello"  href='jobsapplied/{{n.id}}' >Apply</a>
-
-
 
 
 
