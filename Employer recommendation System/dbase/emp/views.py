@@ -37,7 +37,7 @@ def forstu(request):
     startyear = request.user.student.startyear
     endyear = request.user.student.endyear
     address = request.user.student.address
-    upload_your_work=request.user.student.upload_your_work
+
     data = {'name': name, 'lnk': lnk, 'gpa': gpa, 'education': education, 'tscore': tscore, 'exp': exp, 'mail': mail,
             'skills': lst, 'about': about, 'git': git, 'address': address, 'ph': ph, 'startyear': startyear,
             'endyear': endyear, 'stream': stream}
@@ -298,6 +298,8 @@ def student_profile(request):
     if request.method =='POST':
         form=studentform(request.POST, request.FILES,instance=student)
         if form.is_valid():
+            fname=form.cleaned_data.get(' upload_your_work')
+
             form.save()
             messages.success(request, "your profile has been created! Now you can apply for jobs")
 
@@ -360,10 +362,16 @@ def handlelogout(request):
 #------------------------------------- sign up page for student
 
 def registerpage_student(request):
+    users = User.objects.all()
+    ls=[]
+    for i in users:
+        ls.append(i)
+    print(users)
     if request.user.is_authenticated:
         return redirect('student')
     else:
         form=CreateUserForm()
+
 
         if request.method=='POST':
             form=CreateUserForm(request.POST)
@@ -373,8 +381,10 @@ def registerpage_student(request):
                 group=Group.objects.get(name='students')
                 user.groups.add(group)
                 student.objects.create(user=user,)
-                #messages.success(request,'Account was created for '+ username)
+                messages.success(request,'Account was created for '+ username)
                 return redirect("login")
+
+
         context={'form':form}
         return render(request,'emp/reg.html',context)
 
@@ -465,21 +475,25 @@ def apply_to_particular(request,pk):
         k = len(p)
         for j in p:
             stud = j.student.all()
+            print(stud)
             st_skill = stud[0].skills.split(',')
+            print(st_skill)
             job_skills = jb.jobskills.split(',')
             for j in st_skill:
                 j = j.lower()
                 sk.append(j)
             st_skill = sk
+            sk=[]
             st_skill = set(st_skill)
             job_skills = set(job_skills)
             val1 = job_skills.intersection(st_skill)
             val2 = job_skills.union(st_skill)
             sim = len(val1) / len(val2)
             #print(sim)
-            if sim >= 0.25:
+            if sim >= 0.3:
                 lst_recom.append(stud[0])
-            print(lst_recom)
+                print(sim)
+                print(lst_recom)
 
             # s = student_status.objects.filter(name=stud[0].name)
 
@@ -509,6 +523,7 @@ def student_list(request,pk,pk1):
         for j in p:
             stud = j.student.all()
             st_skill = stud[0].skills.split(',')
+            print(st_skill)
             job_skills = jb.jobskills.split(',')
             for j in st_skill:
                 j = j.lower()
@@ -519,8 +534,9 @@ def student_list(request,pk,pk1):
             val1 = job_skills.intersection(st_skill)
             val2 = job_skills.union(st_skill)
             sim = len(val1) / len(val2)
-            #print(sim)
-            if sim>=0.25:
+            print(1)
+            if sim>=0.4:
+                print(sim)
                 lst_recom.append(stud[0])
             print(lst_recom)
 
@@ -616,6 +632,9 @@ def apply_jobs(request):
         return render(request,'emp/student_section.html')
     else:
         job=[]
+        a1 = appliedjobs.objects.filter(student__name__startswith=request.user.student)
+        #applied=a1.jobs.all()
+        #print(applied)
         alljobs = jobs.objects.all()
         stud = request.user.student
         ds=stud.skills.split(',')
@@ -631,7 +650,8 @@ def apply_jobs(request):
 
 
         total=len(job)
-        #print(job)
+        print(job)
+        #job=list(set(job)-set(applied))
         context={'job':job}
 
 
@@ -768,6 +788,12 @@ def my_report(request,pk2,pk):
     context={'data':su}
     return render(request, 'emp/student_report.html', context)
 
+def st_report(request,pk):
+    su=student.objects.get(id=pk)
+    print(su)
+    context={'data':su}
+    return render(request, 'emp/student_report.html', context)
+
 
 #---------------------------------------------------------MAIN  PAGE SEARCH FUNCTIONS-----------------------------------
 
@@ -806,7 +832,21 @@ def search_job_title(request):
         return render(request, 'emp/search_job_title.html', context)
     else:
         return render(request, 'emp/not_found.html')
+def search_student(request):
+    query = request.GET.get('search4')
+    head = []
+    query = str(query)
 
+    titletemp = student.objects.filter(skills__icontains=query)
+
+    head = titletemp
+    if len(head) >= 1:
+
+        context = {'head': head}
+        print(context)
+        return render(request, 'emp/search_student.html',context)
+    else:
+        return render(request, 'emp/not_found.html')
 def recruiters(request):
     query = request.GET.get('search3')
     title=employer.objects.filter(company_name__icontains=query)
