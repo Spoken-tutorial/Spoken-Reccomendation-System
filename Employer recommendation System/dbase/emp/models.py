@@ -22,6 +22,14 @@ class employer(models.Model):
     def __str__(self):
         return self.company_name
 
+    @property
+    def imageURL(self):
+        try:
+            url = self.image.url
+        except:
+            url = ''
+        return url
+
 # jobs he want to post
 class jobs(models.Model):
 
@@ -40,14 +48,14 @@ class jobs(models.Model):
         return self.jobtitle
 
 YEAR_CHOICES = []
-for r in range(1980, (datetime.datetime.now().year+1)):
+for r in range(2015, (datetime.datetime.now().year+1)):
     YEAR_CHOICES.append((r,r))
 
 # students profile
 class student(models.Model):
     user=models.OneToOneField(User,null=True,blank=True,on_delete=models.CASCADE)
     name=models.CharField(max_length=50,default=" ")
-    mail=models.CharField(max_length=100,default=" ",blank=True,null=True)
+    mail=models.EmailField(default=" ",blank=True,null=True)
     phno=models.CharField(max_length=10,default=0,blank=True,null=True)
     address=models.CharField(max_length=400,default=" ",blank=True)
 
@@ -75,6 +83,22 @@ class student(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def imageURL(self):
+        try:
+            url = self.image.url
+        except:
+            url = ''
+        return url
+
+class spoken(models.Model):
+    student=models.ForeignKey(student,null=True,on_delete=models.CASCADE)
+    programming_languages=models.CharField(max_length=10,null=True,blank=True)
+    score=models.FloatField(null=True,blank=True)
+
+    def __str__(self):
+        return self.student.name
 
 
 class appliedjobs(models.Model):
