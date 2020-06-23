@@ -1,4 +1,4 @@
-
+<!--- Student section base page--->
 {% load static %}
 
 
@@ -76,30 +76,30 @@
       </li>
 
 
-        {% if  s %}
+
   <li class="nav-item">
         <a class="nav-link" href="{% url 'apply' %}">
           <i class="fas fa-user-graduate"></i>
           <span>jobs recommended</span></a>
       </li>
-{% endif %}
+
   <li class="nav-item">
         <a class="nav-link" href="{% url 'student_profile' %}">
           <i class="fas fa-user-graduate"></i>
           <span>Profile Settings</span></a>
       </li>
-{% if  s %}
+
   <li class="nav-item">
         <a class="nav-link" href="" data-toggle="modal" data-target="#signupModal">
           <i class="fas fa-user-graduate"></i>
           <span>Ask us</span></a>
       </li>
 
-        {% endif %}
+
 
 
          <li class="nav-item">
-        <a class="nav-link" href="blogstudent/">
+        <a class="nav-link" href='blogstudent/'>
       <i class="fas fa-user-tie"></i>
           <span>blogs</span></a>
       </li>
