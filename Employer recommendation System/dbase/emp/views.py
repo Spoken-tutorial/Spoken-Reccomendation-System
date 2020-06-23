@@ -540,7 +540,7 @@ def student_list(request,pk,pk1):
                 lst_recom.append(stud[0])
             print(lst_recom)
 
-            #s = student_status.objects.filter(name=stud[0].name)
+
 
 
 
@@ -551,8 +551,7 @@ def student_list(request,pk,pk1):
     for i in jt:
         if i.student.name not in selected:
             selected.append(i.student.name)
-    #selected.append(jt)
-    #print(selected)
+
 
 
 
@@ -585,7 +584,7 @@ def delete_job(request,pk):
     jb = jobs.objects.get(id=pk)
     if request.method=='POST':
         jb.delete()
-        #messages.success(request,jb.jobtitle +'has been deleted by an employer')
+
         return redirect('employer')
     context={'item':jb}
     return render(request,'emp/delete_job.html',context)
@@ -671,6 +670,7 @@ def company_info(request,pk):
     print(jb.employer.company_name)
     context={'item':jb,'appli':k}
     return render(request,'emp/info_company.html',context)
+
 def latest_update():
     jb = jobs.objects.all()
 
@@ -683,6 +683,7 @@ def latest_update():
     context={'head1':head1}
     return context
 
+#job applied by students
 def jobs_applied(request,pk):
     application=appliedjobs.objects.all()
     st=request.user.student                          #student object
@@ -712,21 +713,19 @@ def jobs_applied(request,pk):
         messages.success(request, "Your application has been sent successfully for")
         return redirect('/')
 
-    #print(application[1].student.all())  student object
-    #print(application[1].jobs.all())         jobs applied object
+
     p=application[1].jobs.all()
 
     return HttpResponse("404 not found")
 
 @allowed_users(allowed_roles=['employer'])
 def students_to_employer(request):
-    #a1 = appliedjobs.objects.filter(jobs__employer__startswith=request.user.student)
+
     name = request.user.employer.jobs_set.all()    # query set of posted jobs
     student_list=[]
     lst=[]
 
 
-    #a1 = appliedjobs.objects.filter(jobs=name[0].id)
     for i in name:
         lst.append(i)
         p=i.appliedjobs_set.all()
@@ -740,19 +739,17 @@ def students_to_employer(request):
             for j in student_skill:
                 j=j.lower()
                 sk.append(j)
-            #print(sk)
-            #print(student_skill)
+
             job_skills=i.jobskills.split(',')
 
 
             lst.append(stud[0])
 
-        #student_list.append((lst,i.jobtitle))
+
         k = len(lst) - 1
         lst.insert(0,k)
         student_list.append(lst)
-        #recom.append(rec_lst)
-        #lst=[]
+
 
 
 
@@ -832,6 +829,8 @@ def search_job_title(request):
         return render(request, 'emp/search_job_title.html', context)
     else:
         return render(request, 'emp/not_found.html')
+
+
 def search_student(request):
     query = request.GET.get('search4')
     head = []
@@ -847,6 +846,8 @@ def search_student(request):
         return render(request, 'emp/search_student.html',context)
     else:
         return render(request, 'emp/not_found.html')
+
+
 def recruiters(request):
     query = request.GET.get('search3')
     title=employer.objects.filter(company_name__icontains=query)
@@ -1008,13 +1009,12 @@ def studentpostcomment(request):
 def checkout(request):
     if request.method=="POST":
 
-        #name = request.POST.get('name', '')
+
         amount =1000
         cmp=request.user.employer
         email = request.user.email
         address = request.POST.get('address1', '') + " " + request.POST.get('address2', '')
-        #city = request.POST.get('city', '')
-        #state = request.POST.get('state', '')
+
         zip_code = request.POST.get('zip_code', '')
         phone = request.POST.get('phone', '')
         order =pay(address=address,zip_code=zip_code, phone=phone, amount=amount,employer=cmp)
@@ -1041,7 +1041,7 @@ def checkout(request):
         return render(request, 'emp/paytm.html', {'param_dict': param_dict})
 
     return render(request, 'emp/payment.html')
-MERCHANT_KEY='W99e!qdOe56Wwt8i'
+MERCHANT_KEY='XXXXXXXX'
 @csrf_exempt
 def handlerequest(request):
     form=request.POST
